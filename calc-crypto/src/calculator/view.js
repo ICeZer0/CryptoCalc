@@ -10,7 +10,7 @@ import {
     MenuItem
 } from 'react-bootstrap'
 
-const CalculatorFrom = ({}) => (
+const CalculatorFrom = ({ }) => (
     <div className="container">
         <div className="row">
             <Form>
