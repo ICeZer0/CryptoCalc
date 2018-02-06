@@ -10,7 +10,7 @@ import {
     MenuItem
 } from 'react-bootstrap'
 
-const CalculatorFrom = ({ }) => (
+const CalculatorFrom = ({handleClick, coin}) => (
     <div className="container">
         <div className="row">
             <Form>
@@ -29,16 +29,16 @@ const CalculatorFrom = ({ }) => (
         </div>
         <div className="row click-buttons">
             <div className="col-md-5">
-                <DropdownButton title="Coin">
+                <DropdownButton id="any" title="Coin">
                     <MenuItem eventKey="1">Action</MenuItem>
                     <MenuItem eventKey="2">Action2</MenuItem>
                 </DropdownButton>
             </div>
             <div className="col-md-2">
-                <Button>Swap</Button>
+                <Button onClick={()=>{handleClick()}}>=</Button>
             </div>
             <div className="col-md-5">
-                <DropdownButton title="Fiat">
+                <DropdownButton id="any"  title="Fiat">
                     <MenuItem eventKey="1">Action</MenuItem>
                     <MenuItem eventKey="2">Action2</MenuItem>
                 </DropdownButton>
@@ -52,13 +52,11 @@ const CalculatorFrom = ({ }) => (
                 <span>=</span>
             </div>
             <div className="col-sm-4">
-                <span>{0} USD</span>
+                <span>{console.log("COINS "+ this.coin)} {0} USD</span>
             </div>
-        </div>
+        </div>     
     </div>
 )
-
-CalculatorFrom.propTypes = {}
 
 export default CalculatorFrom
 

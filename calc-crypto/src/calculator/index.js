@@ -1,6 +1,60 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import CalculatorFrom from './view';
+import {connect} from 'react-redux';
+import * as actionCreators from '../actions/index';
+import {mapCoin} from '../utils/responseHelper';
+import PropTypes from "prop-types";
+
+
+
+class Calculator extends Component {
+  static propTypes = {
+    coinObject: PropTypes.object,
+  }
+  constructor(props) {
+    super();
+    this.state = {
+      coinType: 'bitcoin',
+      fiatType: 'USD'
+    };
+
+    this.updateCoinData = this.updateCoinData.bind(this);
+  }
+
+  // componentDidMount () {
+  // }
+
+  updateCoinData(coinType,fiatType) {
+    this.setState(function () {
+      return {
+        coinType: coinType,
+        fiatType: fiatType
+      }
+    })
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <p className="App-intro">
+          Cryptocurrency Calculator Converter
+        </p>
+        {console.log(this.props.coinObject.coin) }       
+        <CalculatorFrom handleClick={this.props.loadCoin} coin={this.props.coinObject}/>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps=(state)=>{
+  return {
+    coinObject: state
+  }
+};
+
+export default connect (mapStateToProps, actionCreators)(Calculator);
+
 
 // function getCoinPrice(coin,convertCurrency) {
 //     if(coin === null){
@@ -16,15 +70,9 @@ import CalculatorFrom from './view';
 //     );
 // };
 
-export default class Calculator extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            pictures: []
-          };
-      };
 
-      // componentDidMount() {
+
+    // componentDidMount() {
       //     let url = 'https://api.coinmarketcap.com/v1/ticker/litecoin';
       //     let iterator = fetch(url, {method: 'GET', mode: 'no-cors'});
       //     iterator
@@ -40,16 +88,3 @@ export default class Calculator extends Component {
       //       console.log("state", this.state.pictures);
       //     })
       // }
-
-
-  render() {
-    return (
-      <div className="App">
-        <p className="App-intro">
-          Cryptocurrency Calculator Converter
-        </p>
-        <CalculatorFrom/>
-      </div>
-    );
-  }
-}
