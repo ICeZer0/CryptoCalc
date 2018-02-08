@@ -3,7 +3,7 @@ import { getCoinData } from "./coinActions";
 
 export function loadCoin(){
     return(dispatch)=>{
-        return axios.get("https://api.coinmarketcap.com/v1/ticker/bitcoin/")
+        return axios.get("https://api.coinmarketcap.com/v1/ticker/")
         .then((response) => {
             dispatch(getCoinData(response.data))
         })

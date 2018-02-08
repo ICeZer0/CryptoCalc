@@ -1,3 +1,4 @@
 export default {
-    coin: {}
+    coin: {},
+    fiat: []
 }
