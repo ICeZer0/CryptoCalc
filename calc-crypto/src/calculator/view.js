@@ -10,7 +10,7 @@ import {
     MenuItem
 } from 'react-bootstrap'
 
-const CalculatorFrom = ({}) => (
+export const CalculatorFrom = ({handleClick, coin, fiat}) => (
     <div className="container">
         <div className="row">
             <Form>
@@ -29,18 +29,24 @@ const CalculatorFrom = ({}) => (
         </div>
         <div className="row click-buttons">
             <div className="col-md-5">
-                <DropdownButton title="Coin">
-                    <MenuItem eventKey="1">Action</MenuItem>
-                    <MenuItem eventKey="2">Action2</MenuItem>
+                <DropdownButton id="-1" title="coin">
+                {coin && coin.map((child,index) => {
+                    return (
+                        <MenuItem eventKey={index}>{child.name}</MenuItem>
+                    );
+                })}
                 </DropdownButton>
             </div>
             <div className="col-md-2">
-                <Button>Swap</Button>
+                <Button onClick={()=>{handleClick()}}>=</Button>
             </div>
             <div className="col-md-5">
-                <DropdownButton title="Fiat">
-                    <MenuItem eventKey="1">Action</MenuItem>
-                    <MenuItem eventKey="2">Action2</MenuItem>
+                <DropdownButton id="any"  title="Fiat">
+                    {fiat && fiat.map((child, index) =>{
+                        return (
+                            <MenuItem eventKey={index}>{child}</MenuItem>
+                        )
+                    })}
                 </DropdownButton>
             </div>
         </div>
@@ -52,21 +58,16 @@ const CalculatorFrom = ({}) => (
                 <span>=</span>
             </div>
             <div className="col-sm-4">
-                <span>{0} USD</span>
+                <span>{console.log("COINS "+ this.coin)} {0} USD</span>
             </div>
-        </div>
+        </div>     
     </div>
 )
 
-CalculatorFrom.propTypes = {}
-
 export default CalculatorFrom
 
-/*
---Objects--
-UserAmount
-CoinType
-FiatType
-CoinPrice
-FiatPrice
-*/
+CalculatorFrom.PropTypes = {
+    handleClick: PropTypes.object,
+    coin: PropTypes.array,
+    fiat: PropTypes.array
+};

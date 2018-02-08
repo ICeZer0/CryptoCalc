@@ -1,55 +1,61 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import CalculatorFrom from './view';
+import {connect} from 'react-redux';
+import * as actionCreators from '../actions/index';
+import {mapCoin} from '../utils/responseHelper';
+import PropTypes from "prop-types";
+import {coinSelector} from '../selectors/index';
 
-// function getCoinPrice(coin,convertCurrency) {
-//     if(coin === null){
-//         return null;
-//     }
-//     var url = "https://api.coinmarketcap.com/v1/ticker/" + coin + "?convert=" + convertCurrency;
-//     var response = UrlFetchApp.fetch(url);
-//     var json = JSON.parse(response.getContentText());
-//     return (
-//         <div>
-//             <pre>{json}</pre>
-//         </div>          
-//     );
-// };
+let fiat = [
+  "AUD", "BRL", "CAD", "CHF", 
+  "CLP", "CNY", "CZK", "DKK", 
+  "EUR", "GBP", "HKD", "HUF", 
+  "IDR", "ILS", "INR", "JPY", 
+  "KRW", "MXN", "MYR", "NOK", 
+  "NZD", "PHP", "PKR", "PLN", 
+  "RUB", "SEK", "SGD", "THB", 
+  "TRY", "TWD", "ZAR", "USD"
+]
 
-export default class Calculator extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            pictures: []
-          };
-      };
+class Calculator extends Component {
+  static propTypes = {
+    coinMapToProps: PropTypes.array,
+    fiatCurrency: PropTypes.array
+  }
+  state = {
+    coinMapToProps: this.props.coinMapToProps ? this.props.coinMapToProps : [],
+    fiatCurrency: fiat
+  }
 
-      // componentDidMount() {
-      //     let url = 'https://api.coinmarketcap.com/v1/ticker/litecoin';
-      //     let iterator = fetch(url, {method: 'GET', mode: 'no-cors'});
-      //     iterator
-      //       .then(response => {
-      //           if (response.status >= 400) {
-      //               throw new Error("Bad response from server");
-      //             }
-      //           console.log('res:',response)
-      //         return response.json();
-      //     }).then(data => {
-      //         let pictures = data.id;
-      //       this.setState({pictures: pictures});
-      //       console.log("state", this.state.pictures);
-      //     })
-      // }
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.coinMapToProps !== this.props.coinMapToProps){
+      this.setState({
+        coinMapToProps: nextProps.coinMapToProps
+      })
+    }
+  }
 
 
   render() {
+    const {coinMapToProps} = this.state;
+
     return (
       <div className="App">
         <p className="App-intro">
           Cryptocurrency Calculator Converter
-        </p>
-        <CalculatorFrom/>
+        </p>         
+        <CalculatorFrom handleClick={this.props.loadCoin} coin={this.props.coinMapToProps} fiat={this.fiat}/>
       </div>
     );
   }
 }
+
+
+const mapStateToProps=(state)=>{
+  return {
+    coinMapToProps: coinSelector(state),
+  }
+};
+
+export default connect (mapStateToProps, actionCreators)(Calculator);
