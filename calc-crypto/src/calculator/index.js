@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
-import CalculatorFrom from './view';
+import CalculatorForm from './view';
 import {connect} from 'react-redux';
 import * as actionCreators from '../actions/index';
 import {mapCoin} from '../utils/responseHelper';
@@ -19,13 +19,20 @@ let fiat = [
 ]
 
 class Calculator extends Component {
-  static propTypes = {
+  static PropTypes = {
     coinMapToProps: PropTypes.array,
     fiatCurrency: PropTypes.array
   }
   state = {
+    rows: this.props.rows ? this.props.rows : [],
     coinMapToProps: this.props.coinMapToProps ? this.props.coinMapToProps : [],
-    fiatCurrency: fiat
+    fiatCurrency : fiat
+  }
+
+  componentDidMount(mount) {
+    if(this.mount == this.mount) {
+      this.props.loadCoin()
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -34,18 +41,50 @@ class Calculator extends Component {
         coinMapToProps: nextProps.coinMapToProps
       })
     }
+    if(nextProps.fiatCurrency !== this.props.fiatCurrency){
+      this.setState({
+        fiatCurrency: nextProps.fiatCurrency
+      })
+    }
   }
 
+   addRow = (e) => {
+    var rows = this.state.rows;
+    rows.push('new row')
+    this.setState({rows : rows})
+  }
+
+  deleteRow = (e) => {
+    var rows = this.state.rows;
+    rows.pop('new row')
+    this.setState({rows: rows})
+  }
 
   render() {
     const {coinMapToProps} = this.state;
+    const {fiatCurrency} = this.state;
+    const {rows} = this.state;
 
     return (
       <div className="App">
         <p className="App-intro">
           Cryptocurrency Calculator Converter
-        </p>         
-        <CalculatorFrom handleClick={this.props.loadCoin} coin={this.props.coinMapToProps} fiat={this.fiat}/>
+        </p>
+          <Button onClick={this.addRow.bind(this)}>ADD</Button>
+          <Button onClick={this.deleteRow.bind(this)}>DELETE</Button>
+          <div>
+            <table className="table-container">
+              <CalculatorForm coin={coinMapToProps} fiat={fiatCurrency}/> 
+
+              {rows.map((r) => (
+                <tr>
+                  <td>
+                  <CalculatorForm coin={coinMapToProps} fiat={fiatCurrency}/> 
+                  </td>
+                </tr>
+              ))}
+            </table>
+          </div>      
       </div>
     );
   }
@@ -54,7 +93,10 @@ class Calculator extends Component {
 
 const mapStateToProps=(state)=>{
   return {
+    rows: state.array,
+    loadCoin: state.loadCoin,
     coinMapToProps: coinSelector(state),
+    fiatCurrency: state.fiatCurrency
   }
 };
 

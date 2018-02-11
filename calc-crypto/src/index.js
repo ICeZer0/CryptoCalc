@@ -25,7 +25,9 @@ class App extends Component {
             <img src={logo} className="App-logo" alt="logo" />
             <h1 className="App-title">Welcome to CryptCalc</h1>
           </header>
-          <Calculator/>
+          <div className="main-container">
+            <Calculator/>
+          </div>
         </div>
       );
     }

@@ -10,7 +10,7 @@ import {
     MenuItem
 } from 'react-bootstrap'
 
-export const CalculatorFrom = ({handleClick, coin, fiat}) => (
+export const CalculatorForm = ({coin, fiat}) => (
     <div className="container">
         <div className="row">
             <Form>
@@ -28,8 +28,8 @@ export const CalculatorFrom = ({handleClick, coin, fiat}) => (
             </Form>
         </div>
         <div className="row click-buttons">
-            <div className="col-md-5">
-                <DropdownButton id="-1" title="coin">
+            <div className="col-md-6">
+            <DropdownButton id="-1" title="coin">
                 {coin && coin.map((child,index) => {
                     return (
                         <MenuItem eventKey={index}>{child.name}</MenuItem>
@@ -37,10 +37,7 @@ export const CalculatorFrom = ({handleClick, coin, fiat}) => (
                 })}
                 </DropdownButton>
             </div>
-            <div className="col-md-2">
-                <Button onClick={()=>{handleClick()}}>=</Button>
-            </div>
-            <div className="col-md-5">
+            <div className="col-md-6">
                 <DropdownButton id="any"  title="Fiat">
                     {fiat && fiat.map((child, index) =>{
                         return (
@@ -58,16 +55,15 @@ export const CalculatorFrom = ({handleClick, coin, fiat}) => (
                 <span>=</span>
             </div>
             <div className="col-sm-4">
-                <span>{console.log("COINS "+ this.coin)} {0} USD</span>
+                <span>{0} USD</span>
             </div>
         </div>     
     </div>
 )
 
-export default CalculatorFrom
+export default CalculatorForm
 
-CalculatorFrom.PropTypes = {
-    handleClick: PropTypes.object,
+CalculatorForm.PropTypes = {
     coin: PropTypes.array,
     fiat: PropTypes.array
 };

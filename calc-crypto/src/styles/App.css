@@ -1,3 +1,6 @@
+.main-container{
+  margin-left: 12px; 
+}
 .App {
   text-align: center;
 }
@@ -27,10 +30,16 @@
   to { transform: rotate(360deg); }
 }
 
+/*Calculator form stack*/
+.table-container {
+  float: center;
+}
+
 
 /* Calculator Styles */
 .container {
-  border: 4px solid blue;
+  border: 1px solid rgb(0, 0, 0);
+  box-shadow: 4px 4px #1784c7;
 }
 
 .container .btn-toolbar {
