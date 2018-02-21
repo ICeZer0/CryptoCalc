@@ -14,7 +14,6 @@ export default class TypeAheadBox extends Component {
     }
 
     static propTypes = {
-        displayName: 'StatesField',
         coins: PropTypes.array.isRequired,
         selectValue: PropTypes.string
     }
