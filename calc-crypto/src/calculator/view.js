@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-    ButtonToolbar, 
-    Button, 
     FormGroup,
     FormControl,
     Form,
@@ -32,7 +30,10 @@ export const CalculatorForm = ({coin, fiat}) => (
             <DropdownButton id="-1" title="coin">
                 {coin && coin.map((child,index) => {
                     return (
-                        <MenuItem eventKey={index}>{child.name}</MenuItem>
+                        <MenuItem 
+                            key={child.id} 
+                            eventKey={index}
+                            >{child.name}</MenuItem>
                     );
                 })}
                 </DropdownButton>
@@ -41,7 +42,7 @@ export const CalculatorForm = ({coin, fiat}) => (
                 <DropdownButton id="any"  title="Fiat">
                     {fiat && fiat.map((child, index) =>{
                         return (
-                            <MenuItem eventKey={index}>{child}</MenuItem>
+                            <MenuItem key={index} eventKey={index}>{child}</MenuItem>
                         )
                     })}
                 </DropdownButton>

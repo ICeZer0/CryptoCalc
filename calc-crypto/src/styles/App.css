@@ -1,5 +1,6 @@
 .main-container{
   margin-left: 12px; 
+  margin-right: 12px;
 }
 .App {
   text-align: center;
@@ -31,10 +32,14 @@
 }
 
 /*Calculator form stack*/
-.table-container {
-  float: center;
+.card-row {
+  width: 100%;
+  position: absolute;
 }
 
+.table-container {
+  margin: 0 auto;
+}
 
 /* Calculator Styles */
 .container {

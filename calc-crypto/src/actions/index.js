@@ -8,7 +8,7 @@ export function loadCoin(){
             dispatch(getCoinData(response.data))
         })
         .catch(() =>{
-            throw("Error getting coin market cap information");
+            throw new Error("Error getting coin market cap information");
         }); 
     }
 }

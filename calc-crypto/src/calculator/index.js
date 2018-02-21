@@ -3,9 +3,9 @@ import { Button } from 'react-bootstrap';
 import CalculatorForm from './view';
 import {connect} from 'react-redux';
 import * as actionCreators from '../actions/index';
-import {mapCoin} from '../utils/responseHelper';
 import PropTypes from "prop-types";
-import {coinSelector} from '../selectors/index';
+import {coinSelector, rowInitialize} from '../selectors/index';
+import TypeAheadBox from '../common/button/type-ahead-box';
 
 let fiat = [
   "AUD", "BRL", "CAD", "CHF", 
@@ -19,20 +19,23 @@ let fiat = [
 ]
 
 class Calculator extends Component {
-  static PropTypes = {
+  constructor(props){
+    super(props);
+    this.state = {
+      rows: this.props.rows,
+      coinMapToProps: this.props.coinMapToProps,
+      fiatCurrency : fiat
+    }
+  }
+
+  static propTypes = {
+    rows: PropTypes.array,
     coinMapToProps: PropTypes.array,
     fiatCurrency: PropTypes.array
   }
-  state = {
-    rows: this.props.rows ? this.props.rows : [],
-    coinMapToProps: this.props.coinMapToProps ? this.props.coinMapToProps : [],
-    fiatCurrency : fiat
-  }
 
   componentDidMount(mount) {
-    if(this.mount == this.mount) {
-      this.props.loadCoin()
-    }
+    this.props.loadCoin() 
   }
 
   componentWillReceiveProps(nextProps) {
@@ -72,17 +75,19 @@ class Calculator extends Component {
         </p>
           <Button onClick={this.addRow.bind(this)}>ADD</Button>
           <Button onClick={this.deleteRow.bind(this)}>DELETE</Button>
-          <div>
+          <TypeAheadBox coins={coinMapToProps} />
+          <div className="card-row">
             <table className="table-container">
-              <CalculatorForm coin={coinMapToProps} fiat={fiatCurrency}/> 
-
-              {rows.map((r) => (
-                <tr>
-                  <td>
-                  <CalculatorForm coin={coinMapToProps} fiat={fiatCurrency}/> 
-                  </td>
-                </tr>
-              ))}
+              <tbody>
+                <CalculatorForm coin={coinMapToProps} fiat={fiatCurrency}/> 
+                {rows.map((r, index) => (
+                  <tr key={index}>
+                    <td>
+                      <CalculatorForm coin={coinMapToProps} fiat={fiatCurrency}/> 
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>      
       </div>
@@ -93,7 +98,7 @@ class Calculator extends Component {
 
 const mapStateToProps=(state)=>{
   return {
-    rows: state.array,
+    rows: rowInitialize(state),
     loadCoin: state.loadCoin,
     coinMapToProps: coinSelector(state),
     fiatCurrency: state.fiatCurrency
