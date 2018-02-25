@@ -1,12 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import propTypes from 'prop-types';
+import TypeAheadDropDown from '../common/button/type-ahead-box';
 import {
     FormGroup,
     FormControl,
-    Form,
-    DropdownButton,
-    MenuItem
-} from 'react-bootstrap'
+    Form
+} from 'react-bootstrap';
 
 export const CalculatorForm = ({coin, fiat}) => (
     <div className="container">
@@ -18,34 +17,17 @@ export const CalculatorForm = ({coin, fiat}) => (
                 </FormGroup>
                 <FormControl
                     type="number"
-                    //value={this.state.value}
                     placeholder="Enter Amount to Convert"
-                    //onChange={this.handleChange}
                 />   
                 <FormControl.Feedback />
             </Form>
         </div>
         <div className="row click-buttons">
             <div className="col-md-6">
-            <DropdownButton id="-1" title="coin">
-                {coin && coin.map((child,index) => {
-                    return (
-                        <MenuItem 
-                            key={child.id} 
-                            eventKey={index}
-                            >{child.name}</MenuItem>
-                    );
-                })}
-                </DropdownButton>
+                <TypeAheadDropDown coins={coin} />
             </div>
             <div className="col-md-6">
-                <DropdownButton id="any"  title="Fiat">
-                    {fiat && fiat.map((child, index) =>{
-                        return (
-                            <MenuItem key={index} eventKey={index}>{child}</MenuItem>
-                        )
-                    })}
-                </DropdownButton>
+                <TypeAheadDropDown coins={fiat} />
             </div>
         </div>
         <div className="row totals">
@@ -64,7 +46,7 @@ export const CalculatorForm = ({coin, fiat}) => (
 
 export default CalculatorForm
 
-CalculatorForm.PropTypes = {
-    coin: PropTypes.array,
-    fiat: PropTypes.array
+CalculatorForm.propTypes = {
+    coin: propTypes.array,
+    fiat: propTypes.array
 };

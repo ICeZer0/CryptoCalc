@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
-export default class TypeAheadBox extends Component {
+export default class TypeAheadDropDown extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -18,6 +18,12 @@ export default class TypeAheadBox extends Component {
         selectValue: PropTypes.string
     }
 
+    //invoked just before mounting occurs. will Render() once
+    componentWillMount(){
+        this.mapCoinsToDisplay(this.state.coins)
+    }
+
+    //invoked before a mounted component receives new props
     componentWillReceiveProps(nextProps) {
         if(this.props !== nextProps){
             this.setState({
@@ -26,6 +32,7 @@ export default class TypeAheadBox extends Component {
         }
     }
 
+    //is invoked immediately after updating occurs.
     componentDidUpdate(prevProps, prevState){
         if(prevProps !== prevState.coinArray){
             if(this.state.coinArray <= 0 ) {
@@ -62,17 +69,17 @@ export default class TypeAheadBox extends Component {
     }
 
     render () {
-        const {coinArray} = this.state;
+        const item = this.state.coinArray;
 
         return(
-            <div className="section">
+            <div className="typeAhead-dropdown">
                 <Select
                     id="state-select"
                     //ref={(ref) => { this.select.ref; }}
                     onBlurResetsInput={false}
                     onSelectResetsInput={false}
                     autoFocus
-                    options= {coinArray}
+                    options= {item}
                     simpleValue
                     clearable={true}
                     name="selected-state"

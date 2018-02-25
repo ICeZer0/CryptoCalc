@@ -5,18 +5,7 @@ import {connect} from 'react-redux';
 import * as actionCreators from '../actions/index';
 import PropTypes from "prop-types";
 import {coinSelector, rowInitialize} from '../selectors/index';
-import TypeAheadBox from '../common/button/type-ahead-box';
-
-let fiat = [
-  "AUD", "BRL", "CAD", "CHF", 
-  "CLP", "CNY", "CZK", "DKK", 
-  "EUR", "GBP", "HKD", "HUF", 
-  "IDR", "ILS", "INR", "JPY", 
-  "KRW", "MXN", "MYR", "NOK", 
-  "NZD", "PHP", "PKR", "PLN", 
-  "RUB", "SEK", "SGD", "THB", 
-  "TRY", "TWD", "ZAR", "USD"
-]
+import {fiatTypes} from "../common/objects"
 
 class Calculator extends Component {
   constructor(props){
@@ -24,7 +13,7 @@ class Calculator extends Component {
     this.state = {
       rows: this.props.rows,
       coinMapToProps: this.props.coinMapToProps,
-      fiatCurrency : fiat
+      fiatCurrency : fiatTypes
     }
   }
 
@@ -75,7 +64,6 @@ class Calculator extends Component {
         </p>
           <Button onClick={this.addRow.bind(this)}>ADD</Button>
           <Button onClick={this.deleteRow.bind(this)}>DELETE</Button>
-          <TypeAheadBox coins={coinMapToProps} />
           <div className="card-row">
             <table className="table-container">
               <tbody>
