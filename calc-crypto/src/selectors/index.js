@@ -4,3 +4,10 @@ export const coinSelector = (state) => {
     }
     return [];
 }
+
+export const rowInitialize = (state) => {
+    if(state && state.row){
+        return state.row
+    }
+    return [];
+}

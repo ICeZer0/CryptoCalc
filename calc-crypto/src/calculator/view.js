@@ -1,18 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux'
+import TypeAheadDropDown from '../common/button/type-ahead-box';
 import {
-    ButtonToolbar, 
-    Button, 
     FormGroup,
     FormControl,
-    Form,
-    DropdownButton,
-    MenuItem
-} from 'react-bootstrap'
+    Form
+} from 'react-bootstrap';
 
-export const CalculatorFrom = ({handleClick, coin, fiat}) => (
+let CalculatorForm = ({dispatch, coin, fiat}) => (
     <div className="container">
-        <div className="row">
+        <div className="row value-enter">
             <Form>
                 <FormGroup 
                     controlId="formInput"
@@ -20,34 +18,17 @@ export const CalculatorFrom = ({handleClick, coin, fiat}) => (
                 </FormGroup>
                 <FormControl
                     type="number"
-                    //value={this.state.value}
                     placeholder="Enter Amount to Convert"
-                    //onChange={this.handleChange}
                 />   
                 <FormControl.Feedback />
             </Form>
         </div>
         <div className="row click-buttons">
-            <div className="col-md-5">
-                <DropdownButton id="-1" title="coin">
-                {coin && coin.map((child,index) => {
-                    return (
-                        <MenuItem eventKey={index}>{child.name}</MenuItem>
-                    );
-                })}
-                </DropdownButton>
+            <div className="col-md-6">
+                <TypeAheadDropDown coins={coin} />
             </div>
-            <div className="col-md-2">
-                <Button onClick={()=>{handleClick()}}>=</Button>
-            </div>
-            <div className="col-md-5">
-                <DropdownButton id="any"  title="Fiat">
-                    {fiat && fiat.map((child, index) =>{
-                        return (
-                            <MenuItem eventKey={index}>{child}</MenuItem>
-                        )
-                    })}
-                </DropdownButton>
+            <div className="col-md-6">
+                <TypeAheadDropDown coins={fiat} />
             </div>
         </div>
         <div className="row totals">
@@ -58,16 +39,17 @@ export const CalculatorFrom = ({handleClick, coin, fiat}) => (
                 <span>=</span>
             </div>
             <div className="col-sm-4">
-                <span>{console.log("COINS "+ this.coin)} {0} USD</span>
+                <span>{0} USD</span>
             </div>
         </div>     
     </div>
 )
 
-export default CalculatorFrom
+CalculatorForm = connect()(CalculatorForm)
 
-CalculatorFrom.PropTypes = {
-    handleClick: PropTypes.object,
+export default CalculatorForm
+
+CalculatorForm.propTypes = {
     coin: PropTypes.array,
     fiat: PropTypes.array
 };
