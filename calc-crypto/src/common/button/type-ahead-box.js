@@ -2,8 +2,11 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import * as userActions from '../../actions/coinActions';
 
-export default class TypeAheadDropDown extends Component {
+class TypeAheadDropDown extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -75,7 +78,7 @@ export default class TypeAheadDropDown extends Component {
             <div className="typeAhead-dropdown">
                 <Select
                     id="state-select"
-                    //ref={(ref) => { this.select.ref; }}
+                    //ref={(ref) => { this.select; }}
                     onBlurResetsInput={false}
                     onSelectResetsInput={false}
                     autoFocus
@@ -93,3 +96,17 @@ export default class TypeAheadDropDown extends Component {
         );
     }
 }
+
+const mapStateToProps = state => {
+    return {
+
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+      userActions: bindActionCreators(userActions, dispatch)
+    };
+};
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(TypeAheadDropDown);

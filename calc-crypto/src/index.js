@@ -6,6 +6,7 @@ import Calculator from './calculator/index';
 import './styles/index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
+import '../node_modules/font-awesome/css/font-awesome.min.css'; 
 
 import registerServiceWorker from './registerServiceWorker';
 import {createStore, applyMiddleware} from 'redux';
@@ -26,7 +27,7 @@ class App extends Component {
             <h1 className="App-title">Welcome to CryptCalc</h1>
           </header>
           <div className="main-container">
-            <Calculator/>
+            <Calculator />
           </div>
         </div>
       );

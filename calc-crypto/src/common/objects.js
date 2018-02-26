@@ -15,7 +15,7 @@ export let fiatTypes = [
     {symbol: "HUF", name: "Hungarian Forint"},
     {symbol: "IDR", name: "Indonesian Rupiah"},
     {symbol: "ILS", name: "Israeli New Shekel"},
-    {symbol: "INR", name: "ndian Rupee"},
+    {symbol: "INR", name: "Indian Rupee"},
     {symbol: "JPY", name: "Japanese Yen"},
     {symbol: "KRW", name: "South Korean Won"},
     {symbol: "MXN", name: "Mexican Peso "},

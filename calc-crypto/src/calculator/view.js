@@ -1,5 +1,6 @@
 import React from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux'
 import TypeAheadDropDown from '../common/button/type-ahead-box';
 import {
     FormGroup,
@@ -7,9 +8,9 @@ import {
     Form
 } from 'react-bootstrap';
 
-export const CalculatorForm = ({coin, fiat}) => (
+let CalculatorForm = ({dispatch, coin, fiat}) => (
     <div className="container">
-        <div className="row">
+        <div className="row value-enter">
             <Form>
                 <FormGroup 
                     controlId="formInput"
@@ -44,9 +45,11 @@ export const CalculatorForm = ({coin, fiat}) => (
     </div>
 )
 
+CalculatorForm = connect()(CalculatorForm)
+
 export default CalculatorForm
 
 CalculatorForm.propTypes = {
-    coin: propTypes.array,
-    fiat: propTypes.array
+    coin: PropTypes.array,
+    fiat: PropTypes.array
 };

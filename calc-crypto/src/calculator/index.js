@@ -23,7 +23,7 @@ class Calculator extends Component {
     fiatCurrency: PropTypes.array
   }
 
-  componentDidMount(mount) {
+  componentDidMount() {
     this.props.loadCoin() 
   }
 
@@ -62,8 +62,9 @@ class Calculator extends Component {
         <p className="App-intro">
           Cryptocurrency Calculator Converter
         </p>
-          <Button onClick={this.addRow.bind(this)}>ADD</Button>
-          <Button onClick={this.deleteRow.bind(this)}>DELETE</Button>
+          <Button className="fa fa-plus fa-2x" onClick={this.addRow.bind(this)} />
+          <Button className="fa fa-trash fa-2x" onClick={this.deleteRow.bind(this)} />
+
           <div className="card-row">
             <table className="table-container">
               <tbody>
