@@ -13,7 +13,8 @@ class Calculator extends Component {
     this.state = {
       rows: this.props.rows,
       coinMapToProps: this.props.coinMapToProps,
-      fiatCurrency : fiatTypes
+      fiatCurrency : fiatTypes,
+      selectedCoin: {}
     }
   }
 
@@ -52,10 +53,23 @@ class Calculator extends Component {
     this.setState({rows: rows})
   }
 
+  handleSelectedCoin = coin => {
+    let coinFound = {}
+    coinFound = this.props.coinMapToProps.find(function (obj) {
+      if(obj.symbol === coin)
+        return obj;
+    });
+    this.setState({
+      selectedCoin: coinFound
+    });
+  console.log(this.state.selectedCoin)
+}
+
   render() {
     const {coinMapToProps} = this.state;
     const {fiatCurrency} = this.state;
     const {rows} = this.state;
+    const {selectedCoin} = this.state;
 
     return (
       <div className="App">
@@ -68,11 +82,19 @@ class Calculator extends Component {
           <div className="card-row">
             <table className="table-container">
               <tbody>
-                <CalculatorForm coin={coinMapToProps} fiat={fiatCurrency}/> 
+                <CalculatorForm 
+                  coin={coinMapToProps} 
+                  fiat={fiatCurrency} 
+                  handleSelectedCoin={this.handleSelectedCoin}
+                  selectedCoin={selectedCoin}/> 
                 {rows.map((r, index) => (
                   <tr key={index}>
                     <td>
-                      <CalculatorForm coin={coinMapToProps} fiat={fiatCurrency}/> 
+                      <CalculatorForm 
+                        coin={coinMapToProps} 
+                        fiat={fiatCurrency}                  
+                        handleSelectedCoin={this.handleSelectedCoin}
+                        selectedCoin={selectedCoin} /> 
                     </td>
                   </tr>
                 ))}
@@ -90,7 +112,7 @@ const mapStateToProps=(state)=>{
     rows: rowInitialize(state),
     loadCoin: state.loadCoin,
     coinMapToProps: coinSelector(state),
-    fiatCurrency: state.fiatCurrency
+    fiatCurrency: state.fiatCurrency, 
   }
 };
 

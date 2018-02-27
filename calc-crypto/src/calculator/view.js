@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
-import TypeAheadDropDown from '../common/button/type-ahead-box';
+import CoinDropDown from '../common/button/coinDropdown';
 import {
     FormGroup,
     FormControl,
     Form
 } from 'react-bootstrap';
 
-let CalculatorForm = ({dispatch, coin, fiat}) => (
+let CalculatorForm = ({coin, fiat, handleSelectedCoin, selectedCoin}) => (
     <div className="container">
         <div className="row value-enter">
             <Form>
@@ -25,21 +25,21 @@ let CalculatorForm = ({dispatch, coin, fiat}) => (
         </div>
         <div className="row click-buttons">
             <div className="col-md-6">
-                <TypeAheadDropDown coins={coin} />
+                <CoinDropDown coins={coin} handleSelectedCoin={handleSelectedCoin} />
             </div>
             <div className="col-md-6">
-                <TypeAheadDropDown coins={fiat} />
+                <CoinDropDown coins={fiat} handleSelectedCoin={handleSelectedCoin} />
             </div>
         </div>
         <div className="row totals">
             <div className="col-sm-4">
-                <span>{0} BTC</span>
+                <span> {selectedCoin.price_btc} BTC Price</span>
             </div>
             <div className="col-sm-4">
                 <span>=</span>
             </div>
             <div className="col-sm-4">
-                <span>{0} USD</span>
+                <span>{selectedCoin.price_usd} USD</span>
             </div>
         </div>     
     </div>
@@ -50,6 +50,7 @@ CalculatorForm = connect()(CalculatorForm)
 export default CalculatorForm
 
 CalculatorForm.propTypes = {
-    coin: PropTypes.array,
-    fiat: PropTypes.array
+    coin: PropTypes.array.isRequired,
+    fiat: PropTypes.array.isRequired,
+    selectedCoin: PropTypes.object
 };

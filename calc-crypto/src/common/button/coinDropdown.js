@@ -6,19 +6,20 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as userActions from '../../actions/coinActions';
 
-class TypeAheadDropDown extends Component {
+class CoinDropDown extends Component {
     constructor(props){
         super(props);
         this.state = {
             coins: this.props.coins,
             selectValue: '',
-            coinArray: []
+            coinArray: [],
         }
     }
 
     static propTypes = {
         coins: PropTypes.array.isRequired,
-        selectValue: PropTypes.string
+        selectValue: PropTypes.string,
+        handleSelectedCoin: PropTypes.func.isRequired
     }
 
     //invoked just before mounting occurs. will Render() once
@@ -54,6 +55,7 @@ class TypeAheadDropDown extends Component {
 		this.setState({
 			selectValue: newValue
         });
+        this.props.handleSelectedCoin(newValue)
         console.log(`Selected: ${newValue}`);
     }
 
@@ -105,8 +107,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-      userActions: bindActionCreators(userActions, dispatch)
+
     };
 };
   
-  export default connect(mapStateToProps, mapDispatchToProps)(TypeAheadDropDown);
+  export default connect(mapStateToProps, mapDispatchToProps)(CoinDropDown);
