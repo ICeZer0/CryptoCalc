@@ -11,20 +11,27 @@ class CoinDropDown extends Component {
         super(props);
         this.state = {
             coins: this.props.coins,
-            selectValue: '',
+            fiat: this.props.fiat,
+            selectCoinValue: 'BTC',
+            selectFiatValue: 'USD',
             coinArray: [],
+            faitArray:[]
         }
     }
 
     static propTypes = {
         coins: PropTypes.array.isRequired,
-        selectValue: PropTypes.string,
-        handleSelectedCoin: PropTypes.func.isRequired
+        fiat: PropTypes.array.isRequired,
+        selectCoinValue: PropTypes.string,
+        selectFiatValue: PropTypes.string,
+        handleSelectedCoin: PropTypes.func.isRequired,
+        handleSelectedFiat: PropTypes.func.isRequired
     }
 
     //invoked just before mounting occurs. will Render() once
     componentWillMount(){
-        this.mapCoinsToDisplay(this.state.coins)
+        this.mapCoinsToDropDown(this.state.coins);
+        this.mapFiatsToDropDown(this.state.fiat);
     }
 
     //invoked before a mounted component receives new props
@@ -40,26 +47,35 @@ class CoinDropDown extends Component {
     componentDidUpdate(prevProps, prevState){
         if(prevProps !== prevState.coinArray){
             if(this.state.coinArray <= 0 ) {
-                this.mapCoinsToDisplay(prevProps.coins)
+                this.mapCoinsToDropDown(prevProps.coins)
             }
         }
     }
 
     getInitialState () {
 		return {
-			selectValue: ''
+            selectCoinValue: 'BTC',
+            selectFiatValue: 'USD',
         };
     }
 
 	updateValue (newValue) {
 		this.setState({
-			selectValue: newValue
+			selectCoinValue: newValue
         });
         this.props.handleSelectedCoin(newValue)
         console.log(`Selected: ${newValue}`);
     }
 
-    mapCoinsToDisplay(obj) {
+    updateFiatValue(value) {
+        this.setState({
+            selectFiatValue : value
+        });
+        this.props.handleSelectedFiat(value)
+        console.log(`Selected Fiat: ${value}`);
+    }
+
+    mapCoinsToDropDown(obj) {
         var arr = [];
 
         obj.map((coin) => {
@@ -73,27 +89,62 @@ class CoinDropDown extends Component {
         })
     }
 
+    mapFiatsToDropDown(obj) {
+        var arr = [];
+
+        obj.map((coin) => {
+            arr.push({value: coin.symbol, label: coin.name})
+            return {
+                arr
+            };
+        })
+        this.setState({
+            faitArray: arr
+        })
+    }
+
     render () {
-        const item = this.state.coinArray;
+        const coin = this.state.coinArray;
+        const fiat = this.state.faitArray;
 
         return(
-            <div className="typeAhead-dropdown">
-                <Select
-                    id="state-select"
-                    //ref={(ref) => { this.select; }}
-                    onBlurResetsInput={false}
-                    onSelectResetsInput={false}
-                    autoFocus
-                    options= {item}
-                    simpleValue
-                    clearable={true}
-                    name="selected-state"
-                    disabled={false}
-                    value={this.state.selectValue}
-                    onChange={this.updateValue.bind(this)}
-                    rtl={false}
-                    searchable={true}
-                />
+            <div>
+                <div className="typeAhead-dropdown col-sm-6">
+                    <Select
+                        id="state-select"
+                        //ref={(ref) => { this.select; }}
+                        onBlurResetsInput={false}
+                        onSelectResetsInput={false}
+                        autoFocus
+                        options= {coin}
+                        simpleValue
+                        clearable={true}
+                        name="selected-state"
+                        disabled={false}
+                        value={this.state.selectCoinValue}
+                        onChange={this.updateValue.bind(this)}
+                        rtl={false}
+                        searchable={true}
+                    />
+                </div>
+                <div className="typeAhead-dropdown col-sm-6">
+                    <Select
+                        id="state-select"
+                        //ref={(ref) => { this.select; }}
+                        onBlurResetsInput={false}
+                        onSelectResetsInput={false}
+                        autoFocus
+                        options= {fiat}
+                        simpleValue
+                        clearable={true}
+                        name="selected-state"
+                        disabled={false}
+                        value={this.state.selectFiatValue}
+                        onChange={this.updateFiatValue.bind(this)}
+                        rtl={false}
+                        searchable={true}
+                    />
+                </div>
             </div>
         );
     }

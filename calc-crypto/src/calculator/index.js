@@ -14,7 +14,8 @@ class Calculator extends Component {
       rows: this.props.rows,
       coinMapToProps: this.props.coinMapToProps,
       fiatCurrency : fiatTypes,
-      selectedCoin: {}
+      selectedCoin: {},
+      selectedFiat: {}
     }
   }
 
@@ -25,7 +26,7 @@ class Calculator extends Component {
   }
 
   componentDidMount() {
-    this.props.loadCoin() 
+    this.props.loadCoin();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -65,11 +66,24 @@ class Calculator extends Component {
   console.log(this.state.selectedCoin)
 }
 
+handleSelectedFiat = coin => {
+  let coinFound = {}
+  coinFound = this.state.fiatCurrency.find(function (obj) {
+    if(obj.symbol === coin)
+      return obj;
+  });
+  this.setState({
+    selectedFiat: coinFound
+  });
+console.log(this.state.selectedFiat)
+}
+
   render() {
     const {coinMapToProps} = this.state;
     const {fiatCurrency} = this.state;
     const {rows} = this.state;
     const {selectedCoin} = this.state;
+    const {selectedFiat} = this.state;
 
     return (
       <div className="App">
@@ -86,7 +100,9 @@ class Calculator extends Component {
                   coin={coinMapToProps} 
                   fiat={fiatCurrency} 
                   handleSelectedCoin={this.handleSelectedCoin}
-                  selectedCoin={selectedCoin}/> 
+                  handleSelectedFiat={this.handleSelectedFiat}
+                  selectedCoin={selectedCoin}
+                  selectedFiat={selectedFiat} /> 
                 {rows.map((r, index) => (
                   <tr key={index}>
                     <td>
@@ -94,7 +110,9 @@ class Calculator extends Component {
                         coin={coinMapToProps} 
                         fiat={fiatCurrency}                  
                         handleSelectedCoin={this.handleSelectedCoin}
-                        selectedCoin={selectedCoin} /> 
+                        handleSelectedFiat={this.handleSelectedFiat}
+                        selectedCoin={selectedCoin}
+                        selectedFiat={selectedFiat} /> 
                     </td>
                   </tr>
                 ))}

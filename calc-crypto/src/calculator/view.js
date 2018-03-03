@@ -8,9 +8,14 @@ import {
     Form
 } from 'react-bootstrap';
 
-let CalculatorForm = ({coin, fiat, handleSelectedCoin, selectedCoin}) => (
-    <div className="container">
-        <div className="row value-enter">
+var divStyle = {
+    marginTop: "15px",
+  };
+
+  
+let CalculatorForm = ({coin, fiat, handleSelectedCoin, handleSelectedFiat, selectedCoin, selectedFiat}) => (
+    <div className="container" style={divStyle}>
+        <div className="row value-enter col-lg-12">
             <Form>
                 <FormGroup 
                     controlId="formInput"
@@ -24,22 +29,23 @@ let CalculatorForm = ({coin, fiat, handleSelectedCoin, selectedCoin}) => (
             </Form>
         </div>
         <div className="row click-buttons">
-            <div className="col-md-6">
-                <CoinDropDown coins={coin} handleSelectedCoin={handleSelectedCoin} />
-            </div>
-            <div className="col-md-6">
-                <CoinDropDown coins={fiat} handleSelectedCoin={handleSelectedCoin} />
+            <div>
+                <CoinDropDown 
+                    coins={coin} 
+                    fiat={fiat} 
+                    handleSelectedCoin={handleSelectedCoin} 
+                    handleSelectedFiat={handleSelectedFiat} />
             </div>
         </div>
         <div className="row totals">
             <div className="col-sm-4">
-                <span> {selectedCoin.price_btc} BTC Price</span>
+                <span> {selectedCoin !== undefined ? selectedCoin.price_btc : 0} BTC Price</span>
             </div>
             <div className="col-sm-4">
                 <span>=</span>
             </div>
             <div className="col-sm-4">
-                <span>{selectedCoin.price_usd} USD</span>
+                <span>{selectedCoin !== undefined ? selectedCoin.price_usd : 0.00} {selectedFiat.symbol ? selectedFiat.symbol : 'USD'}</span>
             </div>
         </div>     
     </div>
@@ -52,5 +58,6 @@ export default CalculatorForm
 CalculatorForm.propTypes = {
     coin: PropTypes.array.isRequired,
     fiat: PropTypes.array.isRequired,
-    selectedCoin: PropTypes.object
+    selectedCoin: PropTypes.object,
+    selectedFiat: PropTypes.object
 };
