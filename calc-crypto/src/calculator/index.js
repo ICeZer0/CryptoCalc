@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
-import CalculatorForm from './view';
+import CalculatorForm from '../calculatorForm/index';
 import {connect} from 'react-redux';
 import * as actionCreators from '../actions/index';
 import PropTypes from "prop-types";
@@ -10,6 +10,8 @@ import {fiatTypes} from "../common/objects"
 class Calculator extends Component {
   constructor(props){
     super(props);
+    this.handleSelectedCoin = this.handleSelectedCoin.bind(this);
+    this.handleSelectedFiat = this.handleSelectedFiat.bind(this);
     this.state = {
       rows: this.props.rows,
       coinMapToProps: this.props.coinMapToProps,

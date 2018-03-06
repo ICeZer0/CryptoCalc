@@ -3,52 +3,50 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import { connect } from "react-redux";
-import { bindActionCreators } from 'redux';
-import * as userActions from '../../actions/coinActions';
 
-class CoinDropDown extends Component {
+class CoinDropDown extends Component {  
+    static propTypes = {
+        coin: PropTypes.array,
+        fiat: PropTypes.array,
+        selectCoinValue: PropTypes.string,
+        selectFiatValue: PropTypes.string,
+        handleSelectedCoin: PropTypes.func,
+        handleSelectedFiat: PropTypes.func
+    }
+
     constructor(props){
         super(props);
         this.state = {
-            coins: this.props.coins,
-            fiat: this.props.fiat,
+            coin: this.props.coin ? this.props.coin : [],
+            fiat: this.props.fiat ? this.props.fiat : [],
             selectCoinValue: 'BTC',
             selectFiatValue: 'USD',
-            coinArray: [],
-            faitArray:[]
+            coinArray: props.coin ? props.coin : [],
+            faitArray: props.fiat ? props.fiat : [],
+            handleSelectedCoin: this.props.handleSelectedCoin,
+            handleSelectedFiat: this.props.handleSelectedFiat
         }
-    }
-
-    static propTypes = {
-        coins: PropTypes.array.isRequired,
-        fiat: PropTypes.array.isRequired,
-        selectCoinValue: PropTypes.string,
-        selectFiatValue: PropTypes.string,
-        handleSelectedCoin: PropTypes.func.isRequired,
-        handleSelectedFiat: PropTypes.func.isRequired
-    }
-
-    //invoked just before mounting occurs. will Render() once
-    componentWillMount(){
-        this.mapCoinsToDropDown(this.state.coins);
-        this.mapFiatsToDropDown(this.state.fiat);
     }
 
     //invoked before a mounted component receives new props
     componentWillReceiveProps(nextProps) {
         if(this.props !== nextProps){
             this.setState({
-                coins: nextProps.coins
+                coin: nextProps.props.coin,
+                fiat: nextProps.props.fiat
             })
         }
     }
 
     //is invoked immediately after updating occurs.
     componentDidUpdate(prevProps, prevState){
-        if(prevProps !== prevState.coinArray){
-            if(this.state.coinArray <= 0 ) {
-                this.mapCoinsToDropDown(prevProps.coins)
-            }
+        const {coin} = this.state;
+        const {fiat} = this.state;
+        if(coin !== prevState.coin){
+            this.mapCoinsToDropDown(this.state.coin);
+        }
+        if(fiat !== prevState.fiat) {
+            this.mapFiatsToDropDown(this.state.fiat);
         }
     }
 
@@ -76,31 +74,27 @@ class CoinDropDown extends Component {
     }
 
     mapCoinsToDropDown(obj) {
-        var arr = [];
-
-        obj.map((coin) => {
-            arr.push({value: coin.symbol, label: coin.name})
-            return {
-                arr
-            };
-        })
-        this.setState({
-            coinArray: arr
-        })
+        if(obj.length > 0) {
+            var arr = [];
+            obj.map((coin) => {
+                arr.push({value: coin.symbol, label: coin.name})
+            })
+            this.setState({
+                coinArray: arr
+            })
+        }
     }
 
     mapFiatsToDropDown(obj) {
-        var arr = [];
-
-        obj.map((coin) => {
-            arr.push({value: coin.symbol, label: coin.name})
-            return {
-                arr
-            };
-        })
-        this.setState({
-            faitArray: arr
-        })
+        if(obj.length > 0) {
+            var arr = [];
+            obj.map((coin) => {
+                arr.push({value: coin.symbol, label: coin.name})
+            })
+            this.setState({
+                faitArray: arr
+            })
+        }
     }
 
     render () {
