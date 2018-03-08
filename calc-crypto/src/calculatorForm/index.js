@@ -27,30 +27,42 @@ class CalculatorForm extends Component {
             handleSelectedCoin: props.handleSelectedCoin, 
             handleSelectedFiat: props.handleSelectedFiat, 
             selectedCoin: props.selectedCoin, 
-            selectedFiat: props.selectedFiat
+            selectedFiat: props.selectedFiat,
+            inputValue: 1
         }
     }
 
+    handleNumberInput = e =>
+        this.setState({
+            inputValue: e.target.valueAsNumber
+        });
+    
+
     render() {
-        let priceBTC = this.props.selectedCoin !== undefined ? this.props.selectedCoin.price_btc : 0;
-        let priceUSD = this.props.selectedCoin !== undefined ? this.props.selectedCoin.price_usd : 0.00;
+        let priceBTC = Object.keys(this.props.selectedCoin).length > 0 ? this.props.selectedCoin.price_btc : 0;
+        let priceUSD = Object.keys(this.props.selectedCoin).length > 0 ? this.props.selectedCoin.price_usd : 0.00;
         let fiatSymbol = this.props.selectedFiat.symbol ? this.props.selectedFiat.symbol : 'USD';
-        const {handleSelectedCoin, handleSelectedFiat} = this.state;
+        const {handleSelectedCoin, handleSelectedFiat, selectedCoin, selectedFiat} = this.state;
+        const inputValue = isNaN(this.state.inputValue) ? 0 : this.state.inputValue;
         
         return (
             <div className="container" style={divStyle}>
-                <InputForm />
+                <InputForm 
+                    onChange={this.handleNumberInput} 
+                    handleNumberInput={this.handleNumberInput} 
+                    inputValue={inputValue}  />
                 <div className="row click-buttons">
                     <div>
                         <CoinDropDown 
                             props={this.props}
-                            handleSelectedCoin={() => handleSelectedCoin}
-                            handleSelectedFiat={() => handleSelectedFiat} />
+                            handleSelectedCoin={handleSelectedCoin}
+                            handleSelectedFiat={handleSelectedFiat} />
                     </div>
                 </div>
                 <Totals 
-                    priceBTC = {priceBTC}
-                    priceUSD = {priceUSD}
+                    inputValue={inputValue}
+                    priceBTC = {parseFloat(priceBTC)}
+                    priceUSD = {parseFloat(priceUSD)}
                     fiatSymbol = {fiatSymbol} />   
             </div>
         )

@@ -5,7 +5,7 @@ import {
     Form
 } from 'react-bootstrap';
 
-const InputForm = () => (
+const InputForm = (props) => (
     <div className="row value-enter col-lg-12">
         <Form>
             <FormGroup 
@@ -14,6 +14,8 @@ const InputForm = () => (
             </FormGroup>
             <FormControl
                 type="number"
+                default={props.inputValue}
+                onChange={props.handleNumberInput.bind(this)}
                 placeholder="Enter Amount to Convert"
             />   
             <FormControl.Feedback />
