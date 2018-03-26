@@ -1,30 +1,35 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
-import CalculatorForm from './view';
+import CalculatorForm from '../calculatorForm/index';
 import {connect} from 'react-redux';
 import * as actionCreators from '../actions/index';
 import PropTypes from "prop-types";
-import {coinSelector, rowInitialize} from '../selectors/index';
-import {fiatTypes} from "../common/objects"
+import * as selector from '../selectors/index';
 
 class Calculator extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      rows: this.props.rows,
-      coinMapToProps: this.props.coinMapToProps,
-      fiatCurrency : fiatTypes
-    }
-  }
-
   static propTypes = {
     rows: PropTypes.array,
     coinMapToProps: PropTypes.array,
-    fiatCurrency: PropTypes.array
+    fiatCurrency: PropTypes.array,
+    selectedCoin: PropTypes.object,
+    selectedFiat: PropTypes.object
+  }
+
+  constructor(props){
+    super(props);
+    this.handleSelectedCoin = this.handleSelectedCoin.bind(this);
+    this.handleSelectedFiat = this.handleSelectedFiat.bind(this);
+    this.state = {
+      rows: this.props.rows,
+      coinMapToProps: this.props.coinMapToProps,
+      fiatCurrency : this.props.fiatCurrency,
+      selectedCoin: this.props.selectedCoin,
+      selectedFiat: this.props.selectedFiat
+    }
   }
 
   componentDidMount() {
-    this.props.loadCoin() 
+    this.props.loadCoin();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -52,10 +57,36 @@ class Calculator extends Component {
     this.setState({rows: rows})
   }
 
+  handleSelectedCoin = coin => {
+    let coinFound = {}
+    coinFound = this.props.coinMapToProps.find(function (obj) {
+      if(obj.symbol === coin)
+        return obj;
+    });
+    this.setState({
+      selectedCoin: coinFound
+    });
+  console.log("calc handleSelectedCoin: ", this.state.selectedCoin)
+}
+
+handleSelectedFiat = coin => {
+  let coinFound = {}
+  coinFound = this.state.fiatCurrency.find(function (obj) {
+    if(obj.symbol === coin)
+      return obj;
+  });
+  this.setState({
+    selectedFiat: coinFound
+  });
+console.log("calc handleSelectedFiat: ", this.state.selectedFiat)
+}
+
   render() {
     const {coinMapToProps} = this.state;
     const {fiatCurrency} = this.state;
     const {rows} = this.state;
+    const {selectedCoin} = this.state;
+    const {selectedFiat} = this.state;
 
     return (
       <div className="App">
@@ -68,11 +99,23 @@ class Calculator extends Component {
           <div className="card-row">
             <table className="table-container">
               <tbody>
-                <CalculatorForm coin={coinMapToProps} fiat={fiatCurrency}/> 
+                <CalculatorForm 
+                  coin={coinMapToProps} 
+                  fiat={fiatCurrency} 
+                  handleSelectedCoin={this.handleSelectedCoin}
+                  handleSelectedFiat={this.handleSelectedFiat}
+                  selectedCoin={selectedCoin}
+                  selectedFiat={selectedFiat} /> 
                 {rows.map((r, index) => (
                   <tr key={index}>
                     <td>
-                      <CalculatorForm coin={coinMapToProps} fiat={fiatCurrency}/> 
+                      <CalculatorForm 
+                        coin={coinMapToProps} 
+                        fiat={fiatCurrency}                  
+                        handleSelectedCoin={this.handleSelectedCoin}
+                        handleSelectedFiat={this.handleSelectedFiat}
+                        selectedCoin={selectedCoin}
+                        selectedFiat={selectedFiat} /> 
                     </td>
                   </tr>
                 ))}
@@ -87,10 +130,12 @@ class Calculator extends Component {
 
 const mapStateToProps=(state)=>{
   return {
-    rows: rowInitialize(state),
+    rows: selector.rowInitialize(state),
     loadCoin: state.loadCoin,
-    coinMapToProps: coinSelector(state),
-    fiatCurrency: state.fiatCurrency
+    coinMapToProps: selector.coinSelector(state),
+    fiatCurrency: selector.fiatCurrenciesInit(state),
+    selectedCoin: selector.selectedCoinInitializer(state),
+    selectedFiat: selector.selectedFiatInitializer(state)
   }
 };
 

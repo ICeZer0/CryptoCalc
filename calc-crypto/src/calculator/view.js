@@ -1,55 +1,78 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux'
-import TypeAheadDropDown from '../common/button/type-ahead-box';
-import {
-    FormGroup,
-    FormControl,
-    Form
-} from 'react-bootstrap';
+// import React from 'react';
+// import PropTypes from 'prop-types';
+// import { connect } from 'react-redux'
+// import CoinDropDown from '../common/button/coinDropdown';
+// import {
+//     FormGroup,
+//     FormControl,
+//     Form
+// } from 'react-bootstrap';
 
-let CalculatorForm = ({dispatch, coin, fiat}) => (
-    <div className="container">
-        <div className="row value-enter">
-            <Form>
-                <FormGroup 
-                    controlId="formInput"
-                    validationState='success'>
-                </FormGroup>
-                <FormControl
-                    type="number"
-                    placeholder="Enter Amount to Convert"
-                />   
-                <FormControl.Feedback />
-            </Form>
-        </div>
-        <div className="row click-buttons">
-            <div className="col-md-6">
-                <TypeAheadDropDown coins={coin} />
-            </div>
-            <div className="col-md-6">
-                <TypeAheadDropDown coins={fiat} />
-            </div>
-        </div>
-        <div className="row totals">
-            <div className="col-sm-4">
-                <span>{0} BTC</span>
-            </div>
-            <div className="col-sm-4">
-                <span>=</span>
-            </div>
-            <div className="col-sm-4">
-                <span>{0} USD</span>
-            </div>
-        </div>     
-    </div>
-)
+// var divStyle = {
+//     marginTop: "15px",
+//   };
 
-CalculatorForm = connect()(CalculatorForm)
+  
+// class CalculatorForm extends Component {
+//     constructor(props){
+//         super(props);
+//         this.state = {
+//             coin: this.props.coin, 
+//             fiat: this.props.fiat, 
+//             handleSelectedCoin, 
+//             handleSelectedFiat, 
+//             selectedCoin: this.props.selectedCoin, 
+//             selectedFiat: this.props.selectedFiat
+//         }
+//     }
 
-export default CalculatorForm
+//     static propTypes = {
+//         coin: PropTypes.array.isRequired,
+//         fiat: PropTypes.array.isRequired,
+//         selectedCoin: PropTypes.object,
+//         selectedFiat: PropTypes.object
+//     };
 
-CalculatorForm.propTypes = {
-    coin: PropTypes.array,
-    fiat: PropTypes.array
-};
+//     render() {
+
+//         return (
+//             <div className="container" style={divStyle}>
+//             <div className="row value-enter col-lg-12">
+//                 <Form>
+//                     <FormGroup 
+//                         controlId="formInput"
+//                         validationState='success'>
+//                     </FormGroup>
+//                     <FormControl
+//                         type="number"
+//                         placeholder="Enter Amount to Convert"
+//                     />   
+//                     <FormControl.Feedback />
+//                 </Form>
+//             </div>
+//             <div className="row click-buttons">
+//                 <div>
+//                     <CoinDropDown 
+//                         coins={coin} 
+//                         fiat={fiat} 
+//                         handleSelectedCoin={handleSelectedCoin} 
+//                         handleSelectedFiat={handleSelectedFiat} />
+//                 </div>
+//             </div>
+//             <div className="row totals">
+//                 <div className="col-sm-4">
+//                     <span> {selectedCoin !== undefined ? selectedCoin.price_btc : 0} BTC Price</span>
+//                 </div>
+//                 <div className="col-sm-4">
+//                     <span>=</span>
+//                 </div>
+//                 <div className="col-sm-4">
+//                     <span>{selectedCoin !== undefined ? selectedCoin.price_usd : 0.00} {selectedFiat.symbol ? selectedFiat.symbol : 'USD'}</span>
+//                 </div>
+//             </div>     
+//         </div>
+//         )
+//     }
+// }
+
+// export default CalculatorForm;
