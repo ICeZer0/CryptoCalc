@@ -4,6 +4,7 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import { connect } from "react-redux";
 
+
 class CoinDropDown extends Component {  
     static propTypes = {
         coin: PropTypes.array,
@@ -42,11 +43,8 @@ class CoinDropDown extends Component {
     componentDidUpdate(prevProps, prevState){
         const {coin} = this.state;
         const {fiat} = this.state;
-        if(coin !== prevState.coin){
-            this.mapCoinsToDropDown(this.state.coin);
-        }
-        if(fiat !== prevState.fiat) {
-            this.mapFiatsToDropDown(this.state.fiat);
+        if(coin !== prevState.coin && fiat !== prevState.fiat){
+            this.mapToDropDown(this.state.coin, this.state.fiat);
         }
     }
 
@@ -58,11 +56,21 @@ class CoinDropDown extends Component {
     }
 
 	updateValue (newValue) {
-		this.setState({
-			selectCoinValue: newValue
-        });
-        this.props.handleSelectedCoin(newValue)
-        console.log(`Selected: ${newValue}`);
+        const value = {}
+        if(newValue !== undefined){
+            if( newValue !== null){
+                this.setState({
+                    selectCoinValue: newValue
+                });
+                this.props.handleSelectedCoin(newValue)
+                console.log(`Selected: ${newValue}`);
+            }
+        }
+        if( newValue === null){
+            this.setState({
+                selectCoinValue: ''
+            })
+        }
     }
 
     updateFiatValue(value) {
@@ -73,26 +81,34 @@ class CoinDropDown extends Component {
         console.log(`Selected Fiat: ${value}`);
     }
 
-    mapCoinsToDropDown(obj) {
-        if(obj.length > 0) {
+    mapToDropDown(obj1, obj2) {
+        if(obj1.length > 0) {
             var arr = [];
-            obj.map((coin) => {
+            obj1.map((coin) => {
                 arr.push({value: coin.symbol, label: coin.name})
             })
             this.setState({
                 coinArray: arr
             })
         }
-    }
-
-    mapFiatsToDropDown(obj) {
-        if(obj.length > 0) {
+        if(obj2.length > 0) {
             var arr = [];
-            obj.map((coin) => {
+            obj2.map((coin) => {
                 arr.push({value: coin.symbol, label: coin.name})
             })
             this.setState({
                 faitArray: arr
+            })
+        }
+        console.log("in mapToDropDown state:" + this.state.selectedCoin)
+        this.updateValue(this.state.selectCoinValue)
+        this.updateFiatValue(this.state.selectFiatValue)
+    }
+
+    clear(event){
+        if(event.state.selectCoinValue !== null){
+            this.setState({
+                selectCoinValue: ''
             })
         }
     }
@@ -119,12 +135,12 @@ class CoinDropDown extends Component {
                         onChange={this.updateValue.bind(this)}
                         rtl={false}
                         searchable={true}
+                        //onFocus={this.clear(this)}
                     />
                 </div>
                 <div className="typeAhead-dropdown col-sm-6">
                     <Select
                         id="state-select"
-                        //ref={(ref) => { this.select; }}
                         onBlurResetsInput={false}
                         onSelectResetsInput={false}
                         autoFocus
