@@ -1,8 +1,7 @@
-import {fiatTypes} from "../common/objects"
 
-export const coinSelector = (state) => {
-    if(state && state.coin){
-        return state.coin
+export const cryptoCoins = (state) => {
+    if(state && state.coinData){
+        return state.coinData.coin
     }
     return [];
 }
@@ -26,11 +25,4 @@ export const selectedFiatInitializer = (state) => {
         return state.selectedFiat
     }
     return {};
-}
-
-export const fiatCurrenciesInit = (state) => {
-    if(state & state.fiatCurrency){
-        return state.fiatCurrency
-    }
-    return fiatTypes;
 }

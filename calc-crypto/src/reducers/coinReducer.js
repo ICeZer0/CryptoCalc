@@ -1,9 +1,9 @@
-import {GET_COIN_DATA} from '../actions/actionTypes'
+import * as types from '../actions/actionTypes'
 import initialState from './initialState';
 
-export default function mainReducer(state = initialState.coin, action) {
+export default function coinDataReducer(state = initialState.coin, action) {
     switch(action.type) {
-        case GET_COIN_DATA:
+        case types.GET_COIN_DATA_COMPLETE:
             return{ 
                 ...state,
                 coin: action.payload.coinData

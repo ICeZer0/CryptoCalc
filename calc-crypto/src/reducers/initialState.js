@@ -1,5 +1,6 @@
 export default {
     coin: {},
     row: [],
-    fiat: []
+    fiat: [],
+    coinData: {}
 }

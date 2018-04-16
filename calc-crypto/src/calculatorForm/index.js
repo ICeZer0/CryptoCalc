@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import CoinDropDown from '../common/button/coinDropdown';
 import InputForm from './inputFormView';
 import Totals from './totalsView';
+import {connect} from 'react-redux';
+import * as actions from '../actions/coinActions';
+
 
 var divStyle = {
     marginTop: "15px",
@@ -69,4 +72,10 @@ class CalculatorForm extends Component {
     }
 }
 
-export default CalculatorForm;
+const mapStateToProps = (state) => {
+    return {
+
+    }
+}
+
+export default connect(mapStateToProps, actions)(CalculatorForm);

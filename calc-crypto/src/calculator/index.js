@@ -2,40 +2,50 @@ import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import CalculatorForm from '../calculatorForm/index';
 import {connect} from 'react-redux';
-import * as actionCreators from '../actions/index';
+import { bindActionCreators } from 'redux';
+import * as coinActions from '../actions/coinActions';
 import PropTypes from "prop-types";
 import * as selector from '../selectors/index';
+import {fiatTypes} from "../common/fiatObjects";
+
 
 class Calculator extends Component {
   static propTypes = {
+    coinActions: PropTypes.object,
     rows: PropTypes.array,
     coinMapToProps: PropTypes.array,
     fiatCurrency: PropTypes.array,
+    cryptoCoins: PropTypes.array,
     selectedCoin: PropTypes.object,
-    selectedFiat: PropTypes.object
+    selectedFiat: PropTypes.object,
+    mappedCoinTypes: PropTypes.object
   }
 
   constructor(props){
     super(props);
-    this.handleSelectedCoin = this.handleSelectedCoin.bind(this);
-    this.handleSelectedFiat = this.handleSelectedFiat.bind(this);
+
     this.state = {
       rows: this.props.rows,
-      coinMapToProps: this.props.coinMapToProps,
+      cryptoCoins: this.props.cryptoCoins,
       fiatCurrency : this.props.fiatCurrency,
       selectedCoin: this.props.selectedCoin,
-      selectedFiat: this.props.selectedFiat
+      selectedFiat: this.props.selectedFiat,
     }
+    this.mapCoinSymbols = this.mapCoinSymbols.bind(this);
+    this.handleSelectedCoin = this.handleSelectedCoin.bind(this);
+    this.handleSelectedFiat = this.handleSelectedFiat.bind(this);
+    this.addRow = this.addRow.bind(this);
+    this.deleteRow = this.deleteRow.bind(this);
   }
 
-  componentDidMount() {
-    this.props.loadCoin();
+  componentDidMount(){
+    this.props.coinActions.getCoinDataStart(); 
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.coinMapToProps !== this.props.coinMapToProps){
+    if(nextProps.cryptoCoins !== this.props.cryptoCoins){
       this.setState({
-        coinMapToProps: nextProps.coinMapToProps
+        cryptoCoins: nextProps.cryptoCoins
       })
     }
     if(nextProps.fiatCurrency !== this.props.fiatCurrency){
@@ -45,10 +55,22 @@ class Calculator extends Component {
     }
   }
 
+  mapCoinSymbols(){
+    const {cryptoCoins} = this.state;
+    if(cryptoCoins !== undefined){
+      var types = {};
+      const coinTypes = cryptoCoins.map(obj =>{
+        types[obj.name] = obj.symbol;
+      });
+      return types;
+    }
+  }
+
    addRow = (e) => {
     var rows = this.state.rows;
     rows.push('new row')
     this.setState({rows : rows})
+    this.props.mappedCoinTypes = this.mapCoinSymbols();
   }
 
   deleteRow = (e) => {
@@ -59,7 +81,7 @@ class Calculator extends Component {
 
   handleSelectedCoin = coin => {
     let coinFound = {}
-    coinFound = this.props.coinMapToProps.find(function (obj) {
+    coinFound = this.props.cryptoCoins.find(function (obj) {
       if(obj.symbol === coin)
         return obj;
     });
@@ -82,7 +104,7 @@ console.log("calc handleSelectedFiat: ", this.state.selectedFiat)
 }
 
   render() {
-    const {coinMapToProps} = this.state;
+    const {cryptoCoins} = this.state;
     const {fiatCurrency} = this.state;
     const {rows} = this.state;
     const {selectedCoin} = this.state;
@@ -93,29 +115,31 @@ console.log("calc handleSelectedFiat: ", this.state.selectedFiat)
         <p className="App-intro">
           Cryptocurrency Calculator Converter
         </p>
-          <Button className="fa fa-plus fa-2x" onClick={this.addRow.bind(this)} />
-          <Button className="fa fa-trash fa-2x" onClick={this.deleteRow.bind(this)} />
+          <Button className="fa fa-plus fa-2x" onClick={this.addRow} />
+          <Button className="fa fa-trash fa-2x" onClick={this.deleteRow} />
 
           <div className="card-row">
             <table className="table-container">
               <tbody>
                 <CalculatorForm 
-                  coin={coinMapToProps} 
+                  coin={cryptoCoins} 
                   fiat={fiatCurrency} 
                   handleSelectedCoin={this.handleSelectedCoin}
                   handleSelectedFiat={this.handleSelectedFiat}
                   selectedCoin={selectedCoin}
-                  selectedFiat={selectedFiat} /> 
+                  selectedFiat={selectedFiat} 
+                  /> 
                 {rows.map((r, index) => (
                   <tr key={index}>
                     <td>
                       <CalculatorForm 
-                        coin={coinMapToProps} 
+                        coin={cryptoCoins} 
                         fiat={fiatCurrency}                  
                         handleSelectedCoin={this.handleSelectedCoin}
                         handleSelectedFiat={this.handleSelectedFiat}
                         selectedCoin={selectedCoin}
-                        selectedFiat={selectedFiat} /> 
+                        selectedFiat={selectedFiat} 
+                        /> 
                     </td>
                   </tr>
                 ))}
@@ -128,15 +152,21 @@ console.log("calc handleSelectedFiat: ", this.state.selectedFiat)
 }
 
 
-const mapStateToProps=(state)=>{
+export const mapStateToProps=(state)=>{
   return {
     rows: selector.rowInitialize(state),
-    loadCoin: state.loadCoin,
-    coinMapToProps: selector.coinSelector(state),
-    fiatCurrency: selector.fiatCurrenciesInit(state),
+    cryptoCoins: selector.cryptoCoins(state),
+    fiatCurrency: fiatTypes,
     selectedCoin: selector.selectedCoinInitializer(state),
-    selectedFiat: selector.selectedFiatInitializer(state)
+    selectedFiat: selector.selectedFiatInitializer(state),
+    mappedCoinTypes: {}
   }
 };
 
-export default connect (mapStateToProps, actionCreators)(Calculator);
+export const mapDispatchToProps = dispatch => {
+  return {
+    coinActions: bindActionCreators(coinActions, dispatch)
+  }
+}
+
+export default connect (mapStateToProps, mapDispatchToProps)(Calculator);
