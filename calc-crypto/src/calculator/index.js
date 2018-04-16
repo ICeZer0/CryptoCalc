@@ -70,7 +70,7 @@ class Calculator extends Component {
     var rows = this.state.rows;
     rows.push('new row')
     this.setState({rows : rows})
-    this.props.mappedCoinTypes = this.mapCoinSymbols();
+    //this.props.mappedCoinTypes = this.mapCoinSymbols();
   }
 
   deleteRow = (e) => {
@@ -121,14 +121,6 @@ console.log("calc handleSelectedFiat: ", this.state.selectedFiat)
           <div className="card-row">
             <table className="table-container">
               <tbody>
-                <CalculatorForm 
-                  coin={cryptoCoins} 
-                  fiat={fiatCurrency} 
-                  handleSelectedCoin={this.handleSelectedCoin}
-                  handleSelectedFiat={this.handleSelectedFiat}
-                  selectedCoin={selectedCoin}
-                  selectedFiat={selectedFiat} 
-                  /> 
                 {rows.map((r, index) => (
                   <tr key={index}>
                     <td>

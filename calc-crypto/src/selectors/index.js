@@ -10,7 +10,7 @@ export const rowInitialize = (state) => {
     if(state && state.row){
         return state.row
     }
-    return [];
+    return [1];
 }
 
 export const selectedCoinInitializer = (state) => {
