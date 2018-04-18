@@ -1,8 +1,10 @@
 import {combineReducers} from 'redux';
-import coinDataReducer from './coinReducer';
+import * as reducerType from './coinReducer';
 
 const rootReducer = combineReducers({
-    coinData : coinDataReducer
+    coinData : reducerType.coinDataReducer,
+    coinSymbols: reducerType.coinSymbolsReducer,
+    fiatSymbols: reducerType.fiatSymbolsReducer
 });
 
 export default rootReducer;

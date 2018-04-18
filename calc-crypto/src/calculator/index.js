@@ -13,7 +13,7 @@ class Calculator extends Component {
   static propTypes = {
     coinActions: PropTypes.object,
     rows: PropTypes.array,
-    cryptoCoins: PropTypes.array,
+    coinData: PropTypes.array,
     fiatSymbols: PropTypes.array,
     coinSymbols: PropTypes.array
   }
@@ -23,7 +23,7 @@ class Calculator extends Component {
 
     this.state = {
       rows: this.props.rows,
-      cryptoCoins: this.props.cryptoCoins,
+      coinData: this.props.coinData,
       coinSymbols: this.props.coinSymbols,
       fiatSymbols: this.props.fiatSymbols,
     }
@@ -33,37 +33,41 @@ class Calculator extends Component {
     this.deleteRow = this.deleteRow.bind(this);
   }
 
-  shouldComponentUpdate(nextState){
-    return (
-      this.state.coinSymbols !== nextState.coinSymbols ||
-      this.state.fiatSymbols !== nextState.fiatSymbols
-    )
-  }
+  // shouldComponentUpdate(nextState){
+  //   return (
+  //     this.state.coinSymbols !== nextState.coinSymbols ||
+  //     this.state.fiatSymbols !== nextState.fiatSymbols
+  //   )
+  // }
 
   componentDidMount(){
     this.props.coinActions.getCoinDataStart(); 
   }
 
-  componentDidUpdate(prevState){
-    const {fiatSymbols, coinSymbols} = this.state
+  // componentDidUpdate(prevState){
+  //   const {fiatSymbols, coinSymbols} = this.state
 
-    if(prevState.coinSymbols !== coinSymbols){
-      this.setState({
-        coinSymbols: coinSymbols
-      })
-    }
+  //   if(prevState.coinSymbols !== coinSymbols){
+  //     this.setState({
+  //       coinSymbols: coinSymbols
+  //     })
+  //   }
 
-    if(prevState.fiatSymbols !== fiatSymbols){
-      this.setState({
-        fiatSymbols: fiatSymbols
-      })
-    }
-  }
+  //   if(prevState.fiatSymbols !== fiatSymbols){
+  //     this.setState({
+  //       fiatSymbols: fiatSymbols
+  //     })
+  //   }
+  // }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.cryptoCoins !== this.props.cryptoCoins){
+    if(nextProps.coinData !== this.props.coinData){
+      let mappedSymbols = this.mapCoinSymbols(nextProps.coinData);
+      this.props.coinActions.saveCoinSymbols(mappedSymbols);
+      this.props.coinActions.saveFiatSymbols(this.fiatTypes);
+
       this.setState({
-        cryptoCoins: nextProps.cryptoCoins
+        coinData: nextProps.coinData
       })
     }
     if(nextProps.coinSymbols !== this.props.coinSymbols){
@@ -78,24 +82,20 @@ class Calculator extends Component {
     }
   }
 
-  mapCoinSymbols(){
-    const {cryptoCoins} = this.state;
+  mapCoinSymbols(cryptoCoins){
     if(cryptoCoins !== undefined){
-      var types = {};
-      const coinTypes = cryptoCoins.map(obj =>{
-        types[obj.name] = obj.symbol;
-      });
-      return types;
+      let arr = [];
+      for(var coin of cryptoCoins){
+        arr.push({ value: coin.name, label: coin.symbol});
+      }
+
+      return arr;
     }
   }
 
    addRow = (e) => {
     var rows = this.state.rows;
     rows.push('new row')
-    let mappedSymbols = this.mapCoinSymbols();
-
-    this.props.coinActions.saveCoinSymbols(mappedSymbols);
-    this.props.coinActions.saveFiatSymbols(this.fiatTypes);
   }
 
   deleteRow = (e) => {
@@ -106,7 +106,7 @@ class Calculator extends Component {
 
   render() {
     const {
-      cryptoCoins, 
+      coinData, 
       fiatSymbols, 
       coinSymbols, 
       rows
@@ -127,7 +127,7 @@ class Calculator extends Component {
                   <tr key={index}>
                     <td>
                       <CalculatorForm 
-                        cryptoCoinsData={cryptoCoins} 
+                        cryptoCoinsData={coinData} 
                         fiatSymbols={fiatSymbols} 
                         coinSymbols={coinSymbols}                 
                         /> 
@@ -146,9 +146,9 @@ class Calculator extends Component {
 export const mapStateToProps=(state)=>{
   return {
     rows: selector.rowInitialize(state),
-    cryptoCoins: selector.cryptoCoins(state),
-    fiatSymbols: selector.fiatSymbols(state),
-    coinSymbols: selector.coinSymbols(state),
+    coinData: selector.cryptoCoins(state.coinData),
+    coinSymbols: selector.coinSymbols(state.coinSymbols),
+    fiatSymbols: selector.fiatSymbols(state.fiatSymbols),
   }
 };
 

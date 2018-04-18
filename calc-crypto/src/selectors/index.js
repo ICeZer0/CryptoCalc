@@ -1,7 +1,7 @@
 
 export const cryptoCoins = (state) => {
     if(state && state.coinData){
-        return state.coinData.coin
+        return state.coinData
     }
     return [];
 }
@@ -14,28 +14,28 @@ export const rowInitialize = (state) => {
 }
 
 export const coinSymbols = (state) => {
-    if(state & state.coinData){
-        return state.coinData.coinSymbols
+    if(state && state.coinSymbols){
+        return state.coinSymbols
     }
     return [];
 }
 
 export const fiatSymbols = (state) => {
-    if(state & state.coinData){
-        return state.coinData.fiatSymbols
+    if(state && state.fiatSymbols){
+        return state.fiatSymbols.fiatSymbols
     }
     return [];
 }
 
 export const selectedCoinInitializer = (state) => {
-    if(state & state.selectedCoin){
+    if(state && state.selectedCoin){
         return state.selectedCoin
     }
     return {};
 }
 
 export const selectedFiatInitializer = (state) => {
-    if(state & state.selectedFiat){
+    if(state && state.selectedFiat){
         return state.selectedFiat
     }
     return {};
