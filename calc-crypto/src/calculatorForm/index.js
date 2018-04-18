@@ -5,6 +5,7 @@ import InputForm from './inputFormView';
 import Totals from './totalsView';
 import {connect} from 'react-redux';
 import * as actions from '../actions/coinActions';
+import * as selector from '../selectors/index';
 
 
 var divStyle = {
@@ -14,25 +15,50 @@ var divStyle = {
   
 class CalculatorForm extends Component {
     static propTypes = {
-        coin: PropTypes.array.isRequired,
-        fiat: PropTypes.array.isRequired,
-        selectedCoin: PropTypes.object,
-        selectedFiat: PropTypes.object,
-        handleSelectedCoin: PropTypes.func.isRequired, 
-        handleSelectedFiat: PropTypes.func.isRequired, 
+        cryptoCoinsData: PropTypes.array.isRequired,
+        fiatSymbols: PropTypes.array.isRequired,
+        coinSymbols: PropTypes.array.isRequired,
     };
 
     constructor(props){
         super(props);
         this.state = {
-            coin: props.coin, 
-            fiat: props.fiat, 
+            cryptoCoinsData: props.cryptoCoinsData,
+            fiatSymbols: props.fiatSymbols,
+            coinSymbols: props.coinSymbols,
             handleSelectedCoin: props.handleSelectedCoin, 
             handleSelectedFiat: props.handleSelectedFiat, 
             selectedCoin: props.selectedCoin, 
             selectedFiat: props.selectedFiat,
             inputValue: 1
         }
+
+        this.handleSelectedCoin = this.handleSelectedCoin.bind(this);
+        this.handleSelectedFiat = this.handleSelectedFiat.bind(this);
+    }
+
+    handleSelectedCoin = coin => {
+        let coinFound = {}
+        coinFound = this.props.cryptoCoins.find(function (obj) {
+          if(obj.symbol === coin)
+            return obj;
+        });
+        this.setState({
+          selectedCoin: coinFound
+        });
+      console.log("calc handleSelectedCoin: ", this.state.selectedCoin)
+    }
+    
+    handleSelectedFiat = coin => {
+      let coinFound = {}
+      coinFound = this.state.fiatCurrency.find(function (obj) {
+        if(obj.symbol === coin)
+          return obj;
+      });
+      this.setState({
+        selectedFiat: coinFound
+      });
+    console.log("calc handleSelectedFiat: ", this.state.selectedFiat)
     }
 
     handleNumberInput = e =>
@@ -42,9 +68,12 @@ class CalculatorForm extends Component {
     
 
     render() {
-        let priceBTC = Object.keys(this.props.selectedCoin).length > 0 ? this.props.selectedCoin.price_btc : 0;
-        let priceUSD = Object.keys(this.props.selectedCoin).length > 0 ? this.props.selectedCoin.price_usd : 0.00;
-        let fiatSymbol = this.props.selectedFiat.symbol ? this.props.selectedFiat.symbol : 'USD';
+        // let priceBTC = Object.keys(this.props.selectedCoin).length > 0 ? this.props.selectedCoin.price_btc : 0;
+        // let priceUSD = Object.keys(this.props.selectedCoin).length > 0 ? this.props.selectedCoin.price_usd : 0.00;
+        // let fiatSymbol = this.props.selectedFiat.symbol ? this.props.selectedFiat.symbol : 'USD';
+        let priceBTC = 3.21;
+        let priceUSD = 4.45;
+        let fiatSymbol = 'USD';
         const {handleSelectedCoin, handleSelectedFiat, selectedCoin, selectedFiat} = this.state;
         const inputValue = isNaN(this.state.inputValue) ? 0 : this.state.inputValue;
         
@@ -74,7 +103,8 @@ class CalculatorForm extends Component {
 
 const mapStateToProps = (state) => {
     return {
-
+        selectedCoin: selector.selectedCoinInitializer(state),
+        selectedFiat: selector.selectedFiatInitializer(state)
     }
 }
 

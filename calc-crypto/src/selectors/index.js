@@ -13,6 +13,20 @@ export const rowInitialize = (state) => {
     return [1];
 }
 
+export const coinSymbols = (state) => {
+    if(state & state.coinData){
+        return state.coinData.coinSymbols
+    }
+    return [];
+}
+
+export const fiatSymbols = (state) => {
+    if(state & state.coinData){
+        return state.coinData.fiatSymbols
+    }
+    return [];
+}
+
 export const selectedCoinInitializer = (state) => {
     if(state & state.selectedCoin){
         return state.selectedCoin

@@ -7,8 +7,8 @@ import { connect } from "react-redux";
 
 class CoinDropDown extends Component {  
     static propTypes = {
-        coin: PropTypes.array,
-        fiat: PropTypes.array,
+        coinSymbols: PropTypes.array,
+        fiatSymbols: PropTypes.array,
         selectCoinValue: PropTypes.string,
         selectFiatValue: PropTypes.string,
         handleSelectedCoin: PropTypes.func,
@@ -18,8 +18,8 @@ class CoinDropDown extends Component {
     constructor(props){
         super(props);
         this.state = {
-            coin: this.props.coin ? this.props.coin : [],
-            fiat: this.props.fiat ? this.props.fiat : [],
+            coinSymbols: this.props.coinSymbols ? this.props.coinSymbols : [],
+            fiatSymbols: this.props.fiatSymbols ? this.props.fiatSymbols : [],
             selectCoinValue: 'BTC',
             selectFiatValue: 'USD',
             coinArray: props.coin ? props.coin : [],

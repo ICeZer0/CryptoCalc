@@ -1,6 +1,9 @@
 export default {
     coin: {},
     row: [],
-    fiat: [],
-    coinData: {}
+    coinData: {
+        coin: [],
+        coinSymbols: [],
+        fiatSymbols: []
+    }
 }

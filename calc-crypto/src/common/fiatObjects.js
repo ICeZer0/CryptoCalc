@@ -1,5 +1,5 @@
 
-export let fiatTypes = [  
+export const fiatTypes = [  
     {symbol: "USD", name: "US Dollar"},
     {symbol: "BRL", name: "Brazilian Real"},
     {symbol: "AUD", name: "Australian Dollar"},

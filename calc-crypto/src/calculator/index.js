@@ -13,12 +13,9 @@ class Calculator extends Component {
   static propTypes = {
     coinActions: PropTypes.object,
     rows: PropTypes.array,
-    coinMapToProps: PropTypes.array,
-    fiatCurrency: PropTypes.array,
     cryptoCoins: PropTypes.array,
-    selectedCoin: PropTypes.object,
-    selectedFiat: PropTypes.object,
-    mappedCoinTypes: PropTypes.object
+    fiatSymbols: PropTypes.array,
+    coinSymbols: PropTypes.array
   }
 
   constructor(props){
@@ -27,19 +24,40 @@ class Calculator extends Component {
     this.state = {
       rows: this.props.rows,
       cryptoCoins: this.props.cryptoCoins,
-      fiatCurrency : this.props.fiatCurrency,
-      selectedCoin: this.props.selectedCoin,
-      selectedFiat: this.props.selectedFiat,
+      coinSymbols: this.props.coinSymbols,
+      fiatSymbols: this.props.fiatSymbols,
     }
+
     this.mapCoinSymbols = this.mapCoinSymbols.bind(this);
-    this.handleSelectedCoin = this.handleSelectedCoin.bind(this);
-    this.handleSelectedFiat = this.handleSelectedFiat.bind(this);
     this.addRow = this.addRow.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
   }
 
+  shouldComponentUpdate(nextState){
+    return (
+      this.state.coinSymbols !== nextState.coinSymbols ||
+      this.state.fiatSymbols !== nextState.fiatSymbols
+    )
+  }
+
   componentDidMount(){
     this.props.coinActions.getCoinDataStart(); 
+  }
+
+  componentDidUpdate(prevState){
+    const {fiatSymbols, coinSymbols} = this.state
+
+    if(prevState.coinSymbols !== coinSymbols){
+      this.setState({
+        coinSymbols: coinSymbols
+      })
+    }
+
+    if(prevState.fiatSymbols !== fiatSymbols){
+      this.setState({
+        fiatSymbols: fiatSymbols
+      })
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -48,9 +66,14 @@ class Calculator extends Component {
         cryptoCoins: nextProps.cryptoCoins
       })
     }
-    if(nextProps.fiatCurrency !== this.props.fiatCurrency){
+    if(nextProps.coinSymbols !== this.props.coinSymbols){
       this.setState({
-        fiatCurrency: nextProps.fiatCurrency
+        coinSymbols: nextProps.coinSymbols
+      })
+    }
+    if(nextProps.fiatSymbols !== this.props.fiatSymbols){
+      this.setState({
+        fiatSymbols: nextProps.fiatSymbols
       })
     }
   }
@@ -69,8 +92,10 @@ class Calculator extends Component {
    addRow = (e) => {
     var rows = this.state.rows;
     rows.push('new row')
-    this.setState({rows : rows})
-    //this.props.mappedCoinTypes = this.mapCoinSymbols();
+    let mappedSymbols = this.mapCoinSymbols();
+
+    this.props.coinActions.saveCoinSymbols(mappedSymbols);
+    this.props.coinActions.saveFiatSymbols(this.fiatTypes);
   }
 
   deleteRow = (e) => {
@@ -79,36 +104,13 @@ class Calculator extends Component {
     this.setState({rows: rows})
   }
 
-  handleSelectedCoin = coin => {
-    let coinFound = {}
-    coinFound = this.props.cryptoCoins.find(function (obj) {
-      if(obj.symbol === coin)
-        return obj;
-    });
-    this.setState({
-      selectedCoin: coinFound
-    });
-  console.log("calc handleSelectedCoin: ", this.state.selectedCoin)
-}
-
-handleSelectedFiat = coin => {
-  let coinFound = {}
-  coinFound = this.state.fiatCurrency.find(function (obj) {
-    if(obj.symbol === coin)
-      return obj;
-  });
-  this.setState({
-    selectedFiat: coinFound
-  });
-console.log("calc handleSelectedFiat: ", this.state.selectedFiat)
-}
-
   render() {
-    const {cryptoCoins} = this.state;
-    const {fiatCurrency} = this.state;
-    const {rows} = this.state;
-    const {selectedCoin} = this.state;
-    const {selectedFiat} = this.state;
+    const {
+      cryptoCoins, 
+      fiatSymbols, 
+      coinSymbols, 
+      rows
+    } = this.state;
 
     return (
       <div className="App">
@@ -125,12 +127,9 @@ console.log("calc handleSelectedFiat: ", this.state.selectedFiat)
                   <tr key={index}>
                     <td>
                       <CalculatorForm 
-                        coin={cryptoCoins} 
-                        fiat={fiatCurrency}                  
-                        handleSelectedCoin={this.handleSelectedCoin}
-                        handleSelectedFiat={this.handleSelectedFiat}
-                        selectedCoin={selectedCoin}
-                        selectedFiat={selectedFiat} 
+                        cryptoCoinsData={cryptoCoins} 
+                        fiatSymbols={fiatSymbols} 
+                        coinSymbols={coinSymbols}                 
                         /> 
                     </td>
                   </tr>
@@ -148,10 +147,8 @@ export const mapStateToProps=(state)=>{
   return {
     rows: selector.rowInitialize(state),
     cryptoCoins: selector.cryptoCoins(state),
-    fiatCurrency: fiatTypes,
-    selectedCoin: selector.selectedCoinInitializer(state),
-    selectedFiat: selector.selectedFiatInitializer(state),
-    mappedCoinTypes: {}
+    fiatSymbols: selector.fiatSymbols(state),
+    coinSymbols: selector.coinSymbols(state),
   }
 };
 

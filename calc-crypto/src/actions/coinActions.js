@@ -26,3 +26,21 @@ export function getCoinDataError(error){
         }
     };
 }
+
+export function saveCoinSymbols(coinSymbols){
+    return {
+        type: actionTypes.SAVE_COIN_SYMBOLS,
+        payload: {
+            coinSymbols
+        }
+    }
+}
+
+export function saveFiatSymbols(fiatCurrencies){
+    return {
+        type: actionTypes.SAVE_FIAT_SYMBOLS,
+        payload: {
+            fiatCurrencies
+        }
+    }
+}
