@@ -4,7 +4,6 @@ import {createLogger} from 'redux-logger';
 import rootReducer from '../reducers/index';
 import sagas from '../sagas';
 
-const pack = require('../../package.json');
 const sagaMiddleware = createSagaMiddleware();
 const logger = createLogger();
 

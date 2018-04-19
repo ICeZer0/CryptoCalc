@@ -15,7 +15,8 @@ class Calculator extends Component {
     rows: PropTypes.array,
     coinData: PropTypes.array,
     fiatSymbols: PropTypes.array,
-    coinSymbols: PropTypes.array
+    coinSymbols: PropTypes.array,
+    fiatTypes: PropTypes.array
   }
 
   constructor(props){
@@ -25,7 +26,7 @@ class Calculator extends Component {
       rows: this.props.rows,
       coinData: this.props.coinData,
       coinSymbols: this.props.coinSymbols,
-      fiatSymbols: this.props.fiatSymbols,
+      fiatSymbols: this.props.fiatTypes,
     }
 
     this.mapCoinSymbols = this.mapCoinSymbols.bind(this);
@@ -62,10 +63,6 @@ class Calculator extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.coinData !== this.props.coinData){
-      let mappedSymbols = this.mapCoinSymbols(nextProps.coinData);
-      this.props.coinActions.saveCoinSymbols(mappedSymbols);
-      this.props.coinActions.saveFiatSymbols(this.fiatTypes);
-
       this.setState({
         coinData: nextProps.coinData
       })
@@ -96,6 +93,9 @@ class Calculator extends Component {
    addRow = (e) => {
     var rows = this.state.rows;
     rows.push('new row')
+    let mappedSymbols = this.mapCoinSymbols(this.props.coinData);
+    this.props.coinActions.saveCoinSymbols(mappedSymbols);
+    this.props.coinActions.saveFiatSymbols(this.props.fiatTypes);
   }
 
   deleteRow = (e) => {
@@ -149,6 +149,7 @@ export const mapStateToProps=(state)=>{
     coinData: selector.cryptoCoins(state.coinData),
     coinSymbols: selector.coinSymbols(state.coinSymbols),
     fiatSymbols: selector.fiatSymbols(state.fiatSymbols),
+    fiatTypes: fiatTypes
   }
 };
 

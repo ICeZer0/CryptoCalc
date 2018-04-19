@@ -22,7 +22,7 @@ export const coinSymbols = (state) => {
 
 export const fiatSymbols = (state) => {
     if(state && state.fiatSymbols){
-        return state.fiatSymbols.fiatSymbols
+        return state.fiatSymbols
     }
     return [];
 }

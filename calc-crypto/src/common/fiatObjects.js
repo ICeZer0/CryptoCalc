@@ -1,6 +1,5 @@
 
-export default function() {
-    return [
+export var fiatTypes = [
         {symbol: "USD", name: "US Dollar"},
         {symbol: "BRL", name: "Brazilian Real"},
         {symbol: "AUD", name: "Australian Dollar"},
@@ -33,6 +32,5 @@ export default function() {
         {symbol: "TRY", name: "Turkish Lira"},
         {symbol: "TWD", name: "New Taiwan Dollar"},
         {symbol: "ZAR", name: "South African Rand"}
-    ]
-}  
+] ;
 

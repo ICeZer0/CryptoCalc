@@ -1,6 +1,4 @@
 import * as types from '../actions/actionTypes'
-import initialState from './initialState';
-import toastr from 'toastr';
 
 export function coinDataReducer(state = [], action) {
     switch(action.type) {
