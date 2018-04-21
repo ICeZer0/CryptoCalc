@@ -22,6 +22,7 @@ class CalculatorForm extends Component {
 
     constructor(props){
         super(props);
+        
         this.state = {
             cryptoCoinsData: props.cryptoCoinsData,
             fiatSymbols: props.fiatSymbols,
@@ -38,27 +39,27 @@ class CalculatorForm extends Component {
     }
 
     handleSelectedCoin = coin => {
+        console.log(`in handler: ${coin}`);
         let coinFound = {}
-        coinFound = this.props.cryptoCoins.find(function (obj) {
+        coinFound = this.props.cryptoCoinsData.find(obj => {
           if(obj.symbol === coin)
             return obj;
         });
         this.setState({
           selectedCoin: coinFound
         });
-      console.log("calc handleSelectedCoin: ", this.state.selectedCoin)
     }
     
     handleSelectedFiat = coin => {
+        console.log(`in other handler: ${coin}`);
       let coinFound = {}
-      coinFound = this.state.fiatCurrency.find(function (obj) {
+      coinFound = this.state.fiatSymbols.find(obj => {
         if(obj.symbol === coin)
           return obj;
       });
       this.setState({
         selectedFiat: coinFound
       });
-    console.log("calc handleSelectedFiat: ", this.state.selectedFiat)
     }
 
     handleNumberInput = e =>
@@ -68,13 +69,18 @@ class CalculatorForm extends Component {
     
 
     render() {
-        // let priceBTC = Object.keys(this.props.selectedCoin).length > 0 ? this.props.selectedCoin.price_btc : 0;
-        // let priceUSD = Object.keys(this.props.selectedCoin).length > 0 ? this.props.selectedCoin.price_usd : 0.00;
-        // let fiatSymbol = this.props.selectedFiat.symbol ? this.props.selectedFiat.symbol : 'USD';
-        let priceBTC = 3.21;
-        let priceUSD = 4.45;
-        let fiatSymbol = 'USD';
-        const {handleSelectedCoin, handleSelectedFiat, selectedCoin, selectedFiat} = this.state;
+        let priceBTC = Object.keys(this.props.selectedCoin).length > 0 ? this.props.selectedCoin.price_btc : 0;
+        let priceUSD = Object.keys(this.props.selectedCoin).length > 0 ? this.props.selectedCoin.price_usd : 0.00;
+        let fiatSymbol = this.props.selectedFiat.symbol ? this.props.selectedFiat.symbol : 'USD';
+        // let priceBTC = 3.21;
+        // let priceUSD = 4.45;
+        // let fiatSymbol = 'USD';
+        const {
+            handleSelectedCoin, 
+            handleSelectedFiat, 
+            selectedCoin, 
+            selectedFiat
+        } = this.state;
         const inputValue = isNaN(this.state.inputValue) ? 0 : this.state.inputValue;
         
         return (
@@ -87,8 +93,8 @@ class CalculatorForm extends Component {
                     <div>
                         <CoinDropDown 
                             props={this.props}
-                            handleSelectedCoin={handleSelectedCoin}
-                            handleSelectedFiat={handleSelectedFiat} />
+                            handleSelectedCoin={() => handleSelectedCoin}
+                            handleSelectedFiat={() => handleSelectedFiat} />
                     </div>
                 </div>
                 <Totals 

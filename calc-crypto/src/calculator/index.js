@@ -32,6 +32,8 @@ class Calculator extends Component {
     this.mapCoinSymbols = this.mapCoinSymbols.bind(this);
     this.addRow = this.addRow.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
+
+    this.props.coinActions.saveFiatSymbols(this.props.fiatTypes);
   }
 
   // shouldComponentUpdate(nextState){
@@ -45,21 +47,16 @@ class Calculator extends Component {
     this.props.coinActions.getCoinDataStart(); 
   }
 
-  // componentDidUpdate(prevState){
-  //   const {fiatSymbols, coinSymbols} = this.state
+  componentDidUpdate(prevState){
+    const {coinData} = this.state;
 
-  //   if(prevState.coinSymbols !== coinSymbols){
-  //     this.setState({
-  //       coinSymbols: coinSymbols
-  //     })
-  //   }
-
-  //   if(prevState.fiatSymbols !== fiatSymbols){
-  //     this.setState({
-  //       fiatSymbols: fiatSymbols
-  //     })
-  //   }
-  // }
+    if(prevState.coinData !== coinData){
+      if(coinData.length > 0){
+        let mappedSymbols = this.mapCoinSymbols(coinData);
+        this.props.coinActions.saveCoinSymbols(mappedSymbols);
+      }
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.coinData !== this.props.coinData){
@@ -83,9 +80,8 @@ class Calculator extends Component {
     if(cryptoCoins !== undefined){
       let arr = [];
       for(var coin of cryptoCoins){
-        arr.push({ value: coin.name, label: coin.symbol});
+        arr.push({ value: coin.symbol, label: coin.name});
       }
-
       return arr;
     }
   }
@@ -93,9 +89,7 @@ class Calculator extends Component {
    addRow = (e) => {
     var rows = this.state.rows;
     rows.push('new row')
-    let mappedSymbols = this.mapCoinSymbols(this.props.coinData);
-    this.props.coinActions.saveCoinSymbols(mappedSymbols);
-    this.props.coinActions.saveFiatSymbols(this.props.fiatTypes);
+    this.setState({rows: rows})
   }
 
   deleteRow = (e) => {

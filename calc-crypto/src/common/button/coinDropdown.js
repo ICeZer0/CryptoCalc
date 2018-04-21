@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import * as selector from '../../selectors/index';
 import { connect } from "react-redux";
 
 
 class CoinDropDown extends Component {  
     static propTypes = {
+        cryptoCoinsData: PropTypes.array.isRequired,
         coinSymbols: PropTypes.array,
         fiatSymbols: PropTypes.array,
         selectCoinValue: PropTypes.string,
@@ -18,12 +20,11 @@ class CoinDropDown extends Component {
     constructor(props){
         super(props);
         this.state = {
-            coinSymbols: this.props.coinSymbols ? this.props.coinSymbols : [],
-            fiatSymbols: this.props.fiatSymbols ? this.props.fiatSymbols : [],
+            cryptoCoinsData: props.cryptoCoinsData,
+            coinSymbols: props.coinSymbols,
+            fiatSymbols: props.fiatSymbols,
             selectCoinValue: 'BTC',
             selectFiatValue: 'USD',
-            coinArray: props.coin ? props.coin : [],
-            faitArray: props.fiat ? props.fiat : [],
             handleSelectedCoin: this.props.handleSelectedCoin,
             handleSelectedFiat: this.props.handleSelectedFiat
         }
@@ -31,20 +32,35 @@ class CoinDropDown extends Component {
 
     //invoked before a mounted component receives new props
     componentWillReceiveProps(nextProps) {
-        if(this.props !== nextProps){
+        if(nextProps.coinData !== this.props.coinData){
             this.setState({
-                coin: nextProps.props.coin,
-                fiat: nextProps.props.fiat
+              coinData: nextProps.coinData
             })
-        }
+          }
+          if(nextProps.coinSymbols !== this.props.coinSymbols){
+            this.setState({
+              coinSymbols: nextProps.coinSymbols
+            })
+          }
+          if(nextProps.fiatSymbols !== this.props.fiatSymbols){
+            this.setState({
+              fiatSymbols: nextProps.fiatSymbols
+            })
+          }
     }
 
     //is invoked immediately after updating occurs.
     componentDidUpdate(prevProps, prevState){
-        const {coin} = this.state;
-        const {fiat} = this.state;
-        if(coin !== prevState.coin && fiat !== prevState.fiat){
-            this.mapToDropDown(this.state.coin, this.state.fiat);
+        const {coinSymbols, fiatSymbols} = this.state;
+        if(coinSymbols !== prevState.coinSymbols){
+            this.setState({
+                coinSymbols: coinSymbols
+            });
+        }
+        if(fiatSymbols !== prevState.fiatSymbols){
+            this.setState({
+                fiatSymbols: fiatSymbols
+            });
         }
     }
 
@@ -56,14 +72,12 @@ class CoinDropDown extends Component {
     }
 
 	updateValue (newValue) {
-        const value = {}
         if(newValue !== undefined){
             if( newValue !== null){
                 this.setState({
                     selectCoinValue: newValue
                 });
-                this.props.handleSelectedCoin(newValue)
-                console.log(`Selected: ${newValue}`);
+                () => {this.props.handleSelectedCoin(newValue)}
             }
         }
         if( newValue === null){
@@ -78,44 +92,18 @@ class CoinDropDown extends Component {
             selectFiatValue : value
         });
         this.props.handleSelectedFiat(value)
-        console.log(`Selected Fiat: ${value}`);
     }
 
-    mapToDropDown(obj1, obj2) {
-        if(obj1.length > 0) {
-            var arr = [];
-            obj1.map((coin) => {
-                arr.push({value: coin.symbol, label: coin.name})
-            })
-            this.setState({
-                coinArray: arr
-            })
-        }
-        if(obj2.length > 0) {
-            var arr = [];
-            obj2.map((coin) => {
-                arr.push({value: coin.symbol, label: coin.name})
-            })
-            this.setState({
-                faitArray: arr
-            })
-        }
-        console.log("in mapToDropDown state:" + this.state.selectedCoin)
-        this.updateValue(this.state.selectCoinValue)
-        this.updateFiatValue(this.state.selectFiatValue)
-    }
-
-    clear(event){
-        if(event.state.selectCoinValue !== null){
-            this.setState({
-                selectCoinValue: ''
-            })
-        }
-    }
+    // clear(event){
+    //     if(event.state.selectCoinValue !== null){
+    //         this.setState({
+    //             selectCoinValue: ''
+    //         })
+    //     }
+    // }
 
     render () {
-        const coin = this.state.coinArray;
-        const fiat = this.state.faitArray;
+        const {fiatSymbols, coinSymbols} = this.state;
 
         return(
             <div>
@@ -126,7 +114,7 @@ class CoinDropDown extends Component {
                         onBlurResetsInput={false}
                         onSelectResetsInput={false}
                         autoFocus
-                        options= {coin}
+                        options= {coinSymbols}
                         simpleValue
                         clearable={true}
                         name="selected-state"
@@ -144,7 +132,7 @@ class CoinDropDown extends Component {
                         onBlurResetsInput={false}
                         onSelectResetsInput={false}
                         autoFocus
-                        options= {fiat}
+                        options= {fiatSymbols}
                         simpleValue
                         clearable={true}
                         name="selected-state"
@@ -160,11 +148,15 @@ class CoinDropDown extends Component {
     }
 }
 
-const mapStateToProps = state => {
+export const mapStateToProps=(state)=> {
     return {
-
-    };
-};
+      rows: selector.rowInitialize(state),
+      coinData: selector.cryptoCoins(state.coinData),
+      coinSymbols: selector.coinSymbols(state.coinSymbols),
+      fiatSymbols: selector.fiatSymbols(state.fiatSymbols),
+    }
+  };
+  
 
 const mapDispatchToProps = dispatch => {
     return {
