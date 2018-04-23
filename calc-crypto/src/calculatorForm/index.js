@@ -110,7 +110,7 @@ class CalculatorForm extends Component {
         const fiatSymbol = selectedFiat.value ? selectedFiat.value : 'USD';
         const coinSymbol = selectedCoin.symbol ? selectedCoin.symbol : '!';
 
-        let input = isNaN(inputValue) ? 0 : inputValue;
+        let input = isNaN(inputValue) ? 1 : inputValue;
         let selectedCoinValue = Object.keys(selectedCoin).length !== 0 ? {value: selectedCoin.symbol, label: selectedCoin.name} : this.props.coinSymbols[0];
         let selectedFiatValue = Object.keys(selectedFiat).length !== 0 ? selectedFiat : this.props.fiatSymbols[0];
         {console.log('here:' + selectedCoinValue)}

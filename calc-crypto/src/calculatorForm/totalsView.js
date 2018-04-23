@@ -10,7 +10,7 @@ const Totals = ({inputValue, priceBTC, priceUSD, fiatSymbol,coinSymbol}) => (
         </div>  
         <div className="row totals">
             <div className="col-lg-12">
-                <span>{inputValue} = ${priceUSD===0? NaN:inputValue / priceUSD}({coinSymbol}) </span>
+                <span>${inputValue} ({fiatSymbol}) = ${priceUSD===0? NaN:inputValue / priceUSD}({coinSymbol}) </span>
             </div>
         </div>
     </div>
