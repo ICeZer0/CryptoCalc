@@ -36,13 +36,6 @@ class Calculator extends Component {
     this.props.coinActions.saveFiatSymbols(this.props.fiatTypes);
   }
 
-  // shouldComponentUpdate(nextState){
-  //   return (
-  //     this.state.coinSymbols !== nextState.coinSymbols ||
-  //     this.state.fiatSymbols !== nextState.fiatSymbols
-  //   )
-  // }
-
   componentDidMount(){
     this.props.coinActions.getCoinDataStart(); 
   }
@@ -89,6 +82,7 @@ class Calculator extends Component {
    addRow = (e) => {
     var rows = this.state.rows;
     rows.push('new row')
+    console.log('new row')
     this.setState({rows: rows})
   }
 
@@ -102,9 +96,9 @@ class Calculator extends Component {
     const {
       coinData, 
       fiatSymbols, 
-      coinSymbols, 
-      rows
-    } = this.state;
+      coinSymbols
+    } = this.props;
+    const {rows} = this.state;
 
     return (
       <div className="App">

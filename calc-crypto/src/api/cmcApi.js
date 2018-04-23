@@ -4,24 +4,11 @@ const endpoint = 'https://api.coinmarketcap.com/v1/ticker/';
 
 class CoinMarketcapApi {
 
-    // static getAllCoinData(){
-    //     let payload = {};
-    //     return new Promise((resolve, reject) =>{
-    //         axios
-    //             .get(`${endpoint}?limit=0`)
-    //             .then(response => {
-    //                 resolve(response.data);
-    //             })
-    //             .catch(err => {
-    //                 reject(`Error reading cmc api data: ${err}`)
-    //             });
-    //     });
-    // }
-
-        static getAllCoinData(){
+    static getAllCoinData(){
+        let payload = {};
         return new Promise((resolve, reject) =>{
-            
-                axios.get('http://localhost:3000/offlineApiData.json')
+            axios
+                .get(`${endpoint}?limit=0`)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -31,13 +18,18 @@ class CoinMarketcapApi {
         });
     }
 
-    // static getAllCoinData() {
-    //     fetch('../../public/offlineApiData.json')
-    //       .then(r => r.json())
-    //       .then(json => {
-    //         console.log(json)
-    //       })
-    //     }
+    //     static getAllCoinData(){
+    //     return new Promise((resolve, reject) =>{
+            
+    //             axios.get('http://localhost:3000/offlineApiData.json')
+    //             .then(response => {
+    //                 resolve(response.data);
+    //             })
+    //             .catch(err => {
+    //                 reject(`Error reading cmc api data: ${err}`)
+    //             });
+    //     });
+    // }
 
     static getCoinDataBySymbol(coinName){
         let payload = {

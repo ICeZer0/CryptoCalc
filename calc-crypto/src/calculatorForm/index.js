@@ -17,7 +17,7 @@ class CalculatorForm extends Component {
     static propTypes = {
         cryptoCoinsData: PropTypes.array.isRequired,
         fiatSymbols: PropTypes.array.isRequired,
-        coinSymbols: PropTypes.array.isRequired,
+        coinSymbols: PropTypes.array.isRequired
     };
 
     constructor(props){
@@ -31,35 +31,66 @@ class CalculatorForm extends Component {
             handleSelectedFiat: props.handleSelectedFiat, 
             selectedCoin: props.selectedCoin, 
             selectedFiat: props.selectedFiat,
-            inputValue: 1
+            inputValue: props.number
         }
 
         this.handleSelectedCoin = this.handleSelectedCoin.bind(this);
         this.handleSelectedFiat = this.handleSelectedFiat.bind(this);
     }
 
+    shouldComponentUpdate(nextState, nextProps){
+        return(
+            this.state.selectedCoin !== nextState.selectedCoin ||
+            this.state.selectedFiat !== nextState.selectedFiat ||
+            this.state.cryptoCoinsData !== nextState.cryptoCoinsData
+        )
+    }
+
+    componentWillUpdate(nextProps, nextState){
+        if(this.state.selectedCoin !== nextState.selectedCoin) {
+            this.setState({
+                selectedCoin: nextState.selectedCoin
+              });
+        }
+        if(this.state.selectedFiat !== nextState.selectedFiat){
+            this.setState({
+                selectedFiat: nextState.selectedFiat
+            });
+        }     
+    }
+
     handleSelectedCoin = coin => {
         console.log(`in handler: ${coin}`);
+        const{cryptoCoinsData} = this.props;
+
         let coinFound = {}
-        coinFound = this.props.cryptoCoinsData.find(obj => {
-          if(obj.symbol === coin)
-            return obj;
+        coinFound = cryptoCoinsData.find(obj => {
+          if(obj.symbol === coin){
+            coinFound = obj;
+
+            this.setState({
+                selectedCoin: obj
+            });
+          }
         });
-        this.setState({
-          selectedCoin: coinFound
-        });
+        return coinFound;
     }
     
     handleSelectedFiat = coin => {
         console.log(`in other handler: ${coin}`);
-      let coinFound = {}
-      coinFound = this.state.fiatSymbols.find(obj => {
-        if(obj.symbol === coin)
-          return obj;
-      });
-      this.setState({
-        selectedFiat: coinFound
-      });
+        const{fiatSymbols} = this.props;
+
+        let coinFound = {}
+        coinFound = fiatSymbols.find(obj => {
+            if(obj.value === coin){
+                coinFound = obj;
+
+                this.setState({
+                    selectedFiat: obj
+                });
+            }
+        });
+        return coinFound;
     }
 
     handleNumberInput = e =>
@@ -69,39 +100,44 @@ class CalculatorForm extends Component {
     
 
     render() {
-        let priceBTC = Object.keys(this.props.selectedCoin).length > 0 ? this.props.selectedCoin.price_btc : 0;
-        let priceUSD = Object.keys(this.props.selectedCoin).length > 0 ? this.props.selectedCoin.price_usd : 0.00;
-        let fiatSymbol = this.props.selectedFiat.symbol ? this.props.selectedFiat.symbol : 'USD';
-        // let priceBTC = 3.21;
-        // let priceUSD = 4.45;
-        // let fiatSymbol = 'USD';
         const {
-            handleSelectedCoin, 
-            handleSelectedFiat, 
+            inputValue,
             selectedCoin, 
             selectedFiat
         } = this.state;
-        const inputValue = isNaN(this.state.inputValue) ? 0 : this.state.inputValue;
-        
+        let priceBTC = Object.keys(selectedCoin).length !== 0 ? selectedCoin.price_btc : 0;
+        let priceUSD = Object.keys(selectedCoin).length !== 0 ? selectedCoin.price_usd : 0;
+        const fiatSymbol = selectedFiat.value ? selectedFiat.value : 'USD';
+        const coinSymbol = selectedCoin.symbol ? selectedCoin.symbol : '!';
+
+        let input = isNaN(inputValue) ? 0 : inputValue;
+        let selectedCoinValue = Object.keys(selectedCoin).length !== 0 ? {value: selectedCoin.symbol, label: selectedCoin.name} : this.props.coinSymbols[0];
+        let selectedFiatValue = Object.keys(selectedFiat).length !== 0 ? selectedFiat : this.props.fiatSymbols[0];
+        {console.log('here:' + selectedCoinValue)}
+
         return (
             <div className="container" style={divStyle}>
                 <InputForm 
                     onChange={this.handleNumberInput} 
                     handleNumberInput={this.handleNumberInput} 
-                    inputValue={inputValue}  />
+                    inputValue={input}  />
                 <div className="row click-buttons">
                     <div>
                         <CoinDropDown 
-                            props={this.props}
-                            handleSelectedCoin={() => handleSelectedCoin}
-                            handleSelectedFiat={() => handleSelectedFiat} />
+                            coinSymbols={this.props.coinSymbols}
+                            fiatSymbols={this.props.fiatSymbols}
+                            selectedCoinValue={selectedCoinValue}
+                            selectedFiatValue={selectedFiatValue}
+                            handleSelectedCoin={this.handleSelectedCoin}
+                            handleSelectedFiat={this.handleSelectedFiat} />
                     </div>
                 </div>
                 <Totals 
-                    inputValue={inputValue}
+                    inputValue = {input}
                     priceBTC = {parseFloat(priceBTC)}
                     priceUSD = {parseFloat(priceUSD)}
-                    fiatSymbol = {fiatSymbol} />   
+                    fiatSymbol = {fiatSymbol}
+                    coinSymbol = {coinSymbol} />   
             </div>
         )
     }
