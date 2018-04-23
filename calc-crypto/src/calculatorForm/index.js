@@ -60,7 +60,6 @@ class CalculatorForm extends Component {
     }
 
     handleSelectedCoin = coin => {
-        console.log(`in handler: ${coin}`);
         const{cryptoCoinsData} = this.props;
 
         let coinFound = {}
@@ -77,7 +76,6 @@ class CalculatorForm extends Component {
     }
     
     handleSelectedFiat = coin => {
-        console.log(`in other handler: ${coin}`);
         const{fiatSymbols} = this.props;
 
         let coinFound = {}
@@ -113,7 +111,6 @@ class CalculatorForm extends Component {
         let input = isNaN(inputValue) ? 1 : inputValue;
         let selectedCoinValue = Object.keys(selectedCoin).length !== 0 ? {value: selectedCoin.symbol, label: selectedCoin.name} : this.props.coinSymbols[0];
         let selectedFiatValue = Object.keys(selectedFiat).length !== 0 ? selectedFiat : this.props.fiatSymbols[0];
-        {console.log('here:' + selectedCoinValue)}
 
         return (
             <div className="container" style={divStyle}>

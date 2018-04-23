@@ -51,8 +51,8 @@ const CoinDropDown = (props) => {
 CoinDropDown.propTypes = {
     coinSymbols: PropTypes.array,
     fiatSymbols: PropTypes.array,
-    selectedCoinValue: PropTypes.string,
-    selectedFiatValue: PropTypes.string,
+    selectedCoinValue: PropTypes.obj,
+    selectedFiatValue: PropTypes.obj,
     handleSelectedCoin: PropTypes.func,
     handleSelectedFiat: PropTypes.func
 };

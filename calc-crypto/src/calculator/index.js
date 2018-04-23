@@ -82,7 +82,6 @@ class Calculator extends Component {
    addRow = (e) => {
     var rows = this.state.rows;
     rows.push('new row')
-    console.log('new row')
     this.setState({rows: rows})
   }
 
