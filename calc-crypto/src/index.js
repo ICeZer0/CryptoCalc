@@ -1,22 +1,19 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import logo from './styles/logo.svg';
-import './styles/App.css';
 import Calculator from './calculator/index';
+import registerServiceWorker from './registerServiceWorker';
+import {Provider} from 'react-redux';
+import configureStore from './store/configureStore';
+
+import './styles/App.css';
 import './styles/index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import '../node_modules/font-awesome/css/font-awesome.min.css'; 
 
-import registerServiceWorker from './registerServiceWorker';
-import {createStore, applyMiddleware} from 'redux';
-import {Provider} from 'react-redux';
-import thunk from 'redux-thunk';
-import reducers from './reducers/coinReducer';
-
-
-
-let store = createStore(reducers, applyMiddleware(thunk))
+const initialState = {};
+const store = configureStore(initialState);
 
 class App extends Component {
     render() {

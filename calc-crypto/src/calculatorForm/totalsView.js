@@ -1,18 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 
-const Totals = ({inputValue, priceBTC, priceUSD, fiatSymbol}) => (
-    <div className="row totals">
-        <div className="col-sm-4">
-            <span> {inputValue * priceBTC} BTC Price</span>
+const Totals = ({inputValue, priceBTC, priceUSD, fiatSymbol,coinSymbol}) => (
+    <div>
+        <div className="row totals">
+            <div className="col-lg-12">
+                <span>{inputValue} = ${inputValue * priceUSD} ({fiatSymbol}) | ฿{inputValue * priceBTC} (BTC)</span>
+            </div>
+        </div>  
+        <div className="row totals">
+            <div className="col-lg-12">
+                <span>${inputValue} ({fiatSymbol}) = ${priceUSD===0? NaN:inputValue / priceUSD}({coinSymbol}) </span>
+            </div>
         </div>
-        <div className="col-sm-4">
-            <span>=</span>
-        </div>
-        <div className="col-sm-4">
-            <span>{inputValue * priceUSD} {fiatSymbol}</span>
-        </div>
-    </div>  
+    </div>
 )
 
 export default Totals
@@ -20,5 +21,6 @@ export default Totals
 Totals.propTypes = {
     priceBTC: PropTypes.number,
     priceUSD: PropTypes.number,
-    fiatSymbol: PropTypes.string
+    fiatSymbol: PropTypes.string,
+    coinSymbol: PropTypes.string
 }

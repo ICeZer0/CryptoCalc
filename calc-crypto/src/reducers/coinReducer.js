@@ -1,13 +1,34 @@
-import {GET_COIN_DATA} from '../actions/actionTypes'
-import initialState from './initialState';
+import * as types from '../actions/actionTypes'
 
-export default function mainReducer(state = initialState.coin, action) {
+export function coinDataReducer(state = [], action) {
     switch(action.type) {
-        case GET_COIN_DATA:
+        case types.GET_COIN_DATA_COMPLETE:
             return{ 
-                ...state,
-                coin: action.payload.coinData
+                coinData: action.payload.coinData
             };
+        default:
+            return state;
+    }
+}
+
+export function coinSymbolsReducer(state = [], action) {
+    switch(action.type) {
+        case types.SAVE_COIN_SYMBOLS:
+            // toastr.info(`Mapped coins`);
+            return {
+                coinSymbols: action.payload
+            };
+        default:
+            return state;
+    }
+}
+
+export function fiatSymbolsReducer(state = [], action) {
+    switch(action.type) {
+        case types.SAVE_FIAT_SYMBOLS:
+            return {
+                fiatSymbols: action.payload
+            }
         default:
             return state;
     }
